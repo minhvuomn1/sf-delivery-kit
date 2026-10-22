@@ -1,4 +1,5 @@
 # sf-delivery-kit
+<<<<<<< HEAD
 Bộ công cụ chuẩn hóa dự án Salesforce kết hợp Claude Code.
 
 | Thư mục | Giải quyết |
@@ -30,3 +31,6 @@ npx sf-kit detect --apply                      # quét docs/brd + docs/fsd (md/t
 - Thêm cloud sau: `npx sf-kit add-cloud mce` (hoặc `/add-cloud mce`). Xem trạng thái: `npx sf-kit list`.
 - Không muốn cài vào node_modules: `node <đường-dẫn-kit>/bin/sf-kit.mjs init` chạy trong thư mục dự án.
 - `starter-kit/bootstrap.sh` vẫn dùng được để tạo dự án mới từ đầu.
+=======
+Starter Kit Salesforce Project
+>>>>>>> 74872fedfa570235884bbb3accfb2d5860b2dcc4
