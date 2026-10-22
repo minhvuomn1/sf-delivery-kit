@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="Chờ duyệt" icon-name="standard:approval">
+        <div class="slds-p-horizontal_medium">
+            <lightning-textarea label="Ý kiến (bắt buộc khi từ chối)" value={comment}
+                onchange={handleComment}></lightning-textarea>
+            <p lwc:if={isEmpty} class="empty">Không còn yêu cầu nào chờ duyệt.</p>
+            <template for:each={items} for:item="item">
+                <div key={item.id} class="slds-box slds-m-top_small">
+                    <p><strong>{item.title}</strong> - {item.requester}</p>
+                    <p>{item.amount} VND</p>
+                    <lightning-button data-id={item.id} data-action="approve" variant="brand"
+                        label="Duyệt" onclick={handleApprove}></lightning-button>
+                    <lightning-button data-id={item.id} data-action="reject" label="Từ chối"
+                        onclick={handleReject}></lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

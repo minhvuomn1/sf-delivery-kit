@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Tổng quan" icon-name="standard:dashboard">
+        <div class="slds-grid slds-wrap slds-gutters slds-p-horizontal_medium">
+            <template for:each={tiles} for:item="tile">
+                <div key={tile.id} class="slds-col slds-size_1-of-3">
+                    <div class="slds-box slds-theme_shade">
+                        <p class="slds-text-title">{tile.label}</p>
+                        <p class="slds-text-heading_large">{tile.value}</p>
+                        <p class="slds-text-color_weak">{tile.trend}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

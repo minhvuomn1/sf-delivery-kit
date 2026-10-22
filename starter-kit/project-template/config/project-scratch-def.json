@@ -1,0 +1,6 @@
+{
+  "orgName": "Project Scratch Org",
+  "edition": "Developer",
+  "features": ["EnableSetAuditFields"],
+  "settings": { "lightningExperienceSettings": { "enableS1DesktopEnabled": true } }
+}

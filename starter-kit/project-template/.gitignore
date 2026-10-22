@@ -1,0 +1,91 @@
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Node / Salesforce DX local
+node_modules/
+.sfdx/
+.sf/
+manifest/changed-package.xml
+
+# Secrets & JWT deploy
+.env
+.env.*
+!.env.salesforce.example
+.server.key
+.server.crt
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Scratch
+/scratch
+.scratch/
+scripts/apex-tmp/
+scripts/xlsx_work/
+
+# ===== Metadata cấu hình trên giao diện org: KHÔNG quản lý trên git (org là source of truth) =====
+# Giống dự án DongTienPaper: chỉ track Apex, trigger, LWC, Aura, Visualforce.
+# Bỏ dòng nào ra khỏi danh sách này nếu dự án MUỐN track loại metadata đó.
+force-app/main/default/objects
+force-app/main/default/objectTranslations
+force-app/main/default/layouts
+force-app/main/default/profiles
+force-app/main/default/permissionsets
+force-app/main/default/tabs
+force-app/main/default/flexipages
+force-app/main/default/quickActions
+force-app/main/default/flows
+force-app/main/default/flowDefinitions
+force-app/main/default/applications
+force-app/main/default/customMetadata
+force-app/main/default/standardValueSets
+force-app/main/default/standardValueSetTranslations
+force-app/main/default/globalValueSets
+force-app/main/default/staticresources
+force-app/main/default/staticresource
+force-app/main/default/settings
+force-app/main/default/roles
+force-app/main/default/groups
+force-app/main/default/queues
+force-app/main/default/sharingRules
+force-app/main/default/approvalProcesses
+force-app/main/default/workflows
+force-app/main/default/assignmentRules
+force-app/main/default/duplicateRules
+force-app/main/default/matchingRules
+force-app/main/default/pathAssistants
+force-app/main/default/messageChannels
+force-app/main/default/reportTypes
+force-app/main/default/reports
+force-app/main/default/dashboards
+force-app/main/default/email
+force-app/main/default/documents
+force-app/main/default/letterhead
+force-app/main/default/contentassets
+force-app/main/default/customPermissions
+force-app/main/default/notificationtypes
+force-app/main/default/externalClientApps
+force-app/main/default/extlClntAppGlobalOauthSets
+force-app/main/default/extlClntAppOauthPolicies
+force-app/main/default/extlClntAppOauthSettings
+force-app/main/default/lwc/jsconfig.json
+
+# ===== Claude Code =====
+# Local, không commit (cá nhân/máy riêng)
+.claude/settings.local.json
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+.playwright-mcp/
+skills-lock.json
+
+# MẶC ĐỊNH của kit: CLAUDE.md, .claude/, docs/, .mcp.json được TRACK để team review và nâng cấp kit.
+# Dự án DongTienPaper thì giữ chúng local-only; nếu muốn giống, bỏ comment 4 dòng dưới:
+# .mcp.json
+# .claude/
+# CLAUDE.md
+# docs/

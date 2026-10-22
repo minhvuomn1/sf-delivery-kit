@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "Salesforce_Dev": {
+      "command": "npx",
+      "args": ["-y", "@salesforce/mcp@0.30.15", "--orgs", "{{ORG_ALIAS}}", "--toolsets", "orgs,metadata,data,users", "--tools", "run_apex_test", "--allow-non-ga-tools"]
+    },
+    "Salesforce_UAT": {
+      "command": "npx",
+      "args": ["-y", "@salesforce/mcp@0.30.15", "--orgs", "{{ORG_ALIAS}}_UAT", "--toolsets", "orgs,metadata,data,users", "--tools", "run_apex_test", "--allow-non-ga-tools"]
+    },
+    "jira": {
+      "command": "uvx",
+      "args": ["mcp-atlassian"],
+      "env": {
+        "JIRA_URL": "{{JIRA_URL}}",
+        "JIRA_USERNAME": "{{JIRA_USERNAME}}",
+        "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}

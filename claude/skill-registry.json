@@ -1,0 +1,190 @@
+{
+  "_doc": "Registry cho /setup-skills. core = luôn bật. conditional = chỉ bật khi tài liệu dự án có bằng chứng (signals). Sửa file này để đổi mặc định của team. generic = tín hiệu dễ trùng nghĩa: cần >=3 tín hiệu khác nhau mới tự đề xuất (sf-kit detect); tín hiệu còn lại (tên cloud/sản phẩm) 1 chỗ là đủ.",
+  "core": [
+    "salesforce",
+    "salesforce-developer",
+    "mockup-prototype",
+    "journey-mapping",
+    "tdd-workflow",
+    "code-review",
+    "debug-workflow",
+    "jira-to-code-workflow",
+    "deploy-checklist",
+    "apex-conventions",
+    "apex-test-generator",
+    "lwc-patterns",
+    "sf-platform-gotchas",
+    "find-skills",
+    "project-skill-sync"
+  ],
+  "clouds": {
+    "sales-cloud": {
+      "label": "Sales Cloud",
+      "signals": [
+        "sales cloud",
+        "opportunity",
+        "lead",
+        "quote",
+        "forecast",
+        "territory",
+        "pipeline"
+      ]
+    },
+    "service-cloud": {
+      "label": "Service Cloud",
+      "signals": [
+        "service cloud",
+        "case",
+        "omni-channel",
+        "entitlement",
+        "knowledge",
+        "field service",
+        "milestone",
+        "sla"
+      ]
+    },
+    "experience-cloud": {
+      "label": "Experience Cloud",
+      "signals": [
+        "experience cloud",
+        "community",
+        "portal",
+        "partner portal",
+        "guest user",
+        "digital experience",
+        "experience builder"
+      ]
+    },
+    "mce": {
+      "label": "Marketing Cloud Engagement",
+      "signals": [
+        "marketing cloud",
+        "mce",
+        "sfmc",
+        "journey builder",
+        "automation studio",
+        "ampscript",
+        "ssjs",
+        "data extension",
+        "email studio",
+        "cloudpage",
+        "marketing cloud connect"
+      ]
+    },
+    "manufacturing": {
+      "label": "Manufacturing Cloud",
+      "signals": [
+        "manufacturing cloud",
+        "sales agreement",
+        "account forecast",
+        "rebate",
+        "run-rate",
+        "run rate",
+        "partner visit",
+        "advanced account forecasting"
+      ]
+    }
+  },
+  "conditional": {
+    "experience-cloud": {
+      "signals": [
+        "experience cloud",
+        "community",
+        "portal",
+        "guest user",
+        "experience builder"
+      ],
+      "also": [
+        "frontend-design"
+      ]
+    },
+    "frontend-design": {
+      "signals": [
+        "landing page",
+        "branding",
+        "design system",
+        "ui/ux",
+        "theme"
+      ]
+    },
+    "copado-deploy": {
+      "signals": [
+        "copado",
+        "user story",
+        "promotion"
+      ],
+      "also": [
+        "deploy-troubleshooting",
+        "post-deploy-steps",
+        "org-parity-check"
+      ]
+    },
+    "sf-mcp-deploy": {
+      "signals": [
+        "sit",
+        "uat",
+        "sandbox",
+        "release plan",
+        "ci/cd",
+        "pipeline"
+      ],
+      "also": [
+        "deploy-troubleshooting",
+        "post-deploy-steps",
+        "org-parity-check"
+      ]
+    },
+    "using-ui-bundle-salesforce-data": {
+      "signals": [
+        "ui bundle",
+        "uibundle",
+        "uibundles",
+        "react app on salesforce",
+        "graphql"
+      ]
+    },
+    "mce-development": {
+      "signals": [
+        "marketing cloud",
+        "mce",
+        "sfmc",
+        "ampscript",
+        "ssjs",
+        "journey builder",
+        "automation studio",
+        "data extension"
+      ]
+    },
+    "manufacturing-cloud": {
+      "signals": [
+        "manufacturing cloud",
+        "sales agreement",
+        "account forecast",
+        "rebate",
+        "run-rate",
+        "partner visit"
+      ]
+    }
+  },
+  "generic": [
+    "lead",
+    "opportunity",
+    "case",
+    "quote",
+    "forecast",
+    "territory",
+    "pipeline",
+    "portal",
+    "community",
+    "knowledge",
+    "sla",
+    "milestone",
+    "uat",
+    "sit",
+    "sandbox",
+    "theme",
+    "graphql",
+    "rebate",
+    "mce"
+  ]
+}

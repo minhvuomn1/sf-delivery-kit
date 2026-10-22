@@ -1,0 +1,43 @@
+<template>
+    <lightning-card title="Biểu mẫu nhiều bước" icon-name="standard:form">
+        <div class="slds-p-horizontal_medium">
+            <lightning-progress-indicator current-step={currentStepValue} type="path">
+                <lightning-progress-step label="Thông tin" value="1"></lightning-progress-step>
+                <lightning-progress-step label="Chi tiết" value="2"></lightning-progress-step>
+                <lightning-progress-step label="Xác nhận" value="3"></lightning-progress-step>
+            </lightning-progress-indicator>
+
+            <div class="slds-m-vertical_medium">
+                <template lwc:if={isStep1}>
+                    <lightning-input data-id="name" name="name" label="Họ tên" value={form.name} required
+                        onchange={handleChange}></lightning-input>
+                    <lightning-input name="email" label="Email" type="email" value={form.email}
+                        onchange={handleChange}></lightning-input>
+                </template>
+                <template lwc:elseif={isStep2}>
+                    <lightning-textarea name="note" label="Ghi chú" value={form.note}
+                        onchange={handleChange}></lightning-textarea>
+                </template>
+                <template lwc:elseif={isStep3}>
+                    <p><strong>Họ tên:</strong> {form.name}</p>
+                    <p><strong>Email:</strong> {form.email}</p>
+                    <p><strong>Ghi chú:</strong> {form.note}</p>
+                </template>
+                <template lwc:else>
+                    <p class="success">Đã gửi thành công. Mã: {resultId}</p>
+                </template>
+            </div>
+
+            <p lwc:if={error} class="error slds-text-color_error">{error}</p>
+
+            <div class="slds-m-vertical_small" lwc:if={showActions}>
+                <lightning-button data-id="back" label="Quay lại" onclick={handleBack}
+                    disabled={isStep1}></lightning-button>
+                <lightning-button data-id="next" variant="brand" label="Tiếp" onclick={handleNext}
+                    lwc:if={isNotLast}></lightning-button>
+                <lightning-button data-id="submit" variant="brand" label="Gửi" onclick={handleSubmit}
+                    lwc:else></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

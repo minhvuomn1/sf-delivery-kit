@@ -1,0 +1,19 @@
+<template>
+    <div class="portal">
+        <header class="slds-p-around_medium slds-theme_shade">
+            <span class="slds-text-heading_medium">{brand}</span>
+            <nav>
+                <template for:each={navItems} for:item="item">
+                    <a key={item.value} href="#" class="slds-m-right_medium" data-value={item.value}
+                        onclick={handleNav}>{item.label}</a>
+                </template>
+            </nav>
+        </header>
+        <main class="slds-p-around_medium">
+            <slot></slot>
+        </main>
+        <footer class="slds-p-around_medium slds-text-color_weak">
+            <slot name="footer">© {brand}</slot>
+        </footer>
+    </div>
+</template>

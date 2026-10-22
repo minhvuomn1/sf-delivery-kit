@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sf org *)",
+      "Bash(sf project *)",
+      "Bash(sf apex *)",
+      "Bash(sf sobject *)",
+      "Bash(sf data query *)",
+      "Bash(sf config *)",
+      "Bash(npm run test:unit)",
+      "mcp__jira__jira_search",
+      "mcp__jira__jira_get_issue",
+      "mcp__jira__jira_get_all_projects",
+      "mcp__Salesforce_Dev__run_soql_query",
+      "mcp__Salesforce_Dev__list_all_orgs",
+      "mcp__Salesforce_UAT__run_soql_query",
+      "mcp__Salesforce_UAT__list_all_orgs",
+      "Bash(node .claude/kit/kit.mjs list)",
+      "Bash(node .claude/kit/kit.mjs registry)"
+    ],
+    "deny": [
+      "Bash(sf project deploy start:*prod*)",
+      "Bash(sf project deploy start:*PROD*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./.server.key)",
+      "Read(./.sfdx/**)"
+    ]
+  }
+}

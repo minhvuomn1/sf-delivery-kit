@@ -1,0 +1,10 @@
+<template>
+    <lightning-card title="Danh sách" icon-name="standard:account">
+        <div class="slds-p-horizontal_medium">
+            <lightning-combobox label="Trạng thái" value={status} options={statusOptions}
+                onchange={handleStatusChange}></lightning-combobox>
+            <lightning-datatable key-field="Id" data={rows} columns={columns}
+                hide-checkbox-column></lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,15 @@
+{
+  "name": "sf-project",
+  "private": true,
+  "scripts": {
+    "test:unit": "sfdx-lwc-jest",
+    "lint": "eslint **/lwc/**",
+    "prettier": "prettier --write \"**/*.{cls,trigger,js,html,css,json,md}\""
+  },
+  "devDependencies": {
+    "@salesforce/sfdx-lwc-jest": "^7.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-apex": "^2.0.0"
+  }
+}
