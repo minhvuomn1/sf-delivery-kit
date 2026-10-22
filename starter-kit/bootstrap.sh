@@ -41,11 +41,11 @@ cp -r "$KIT/project-context-template" "$DEST/docs"
 mkdir -p "$DEST/docs/notes"
 cp "$KIT/claude/mcp/README.md" "$DEST/docs/mcp-setup.md"
 
-# Prototype: LWC template + kịch bản demo
-mkdir -p "$DEST/prototype"
-cp -r "$KIT/mockup-kit/lwc-templates" "$DEST/prototype/lwc"
-rm -f "$DEST/prototype/lwc/README.md"
-cp "$KIT/mockup-kit/demo-script-template.md" "$DEST/prototype/demo-script.md"
+# Mockup: template nằm ở .claude/kit; `mockup add` copy vào source dự án + app Mockup
+cp -r "$KIT/mockup-kit/lwc-templates" "$DEST/.claude/kit/mockup-templates"
+rm -f "$DEST/.claude/kit/mockup-templates/README.md"
+cp "$KIT/mockup-kit/demo-script-template.md" "$DEST/docs/demo-script.md"
+cp "$KIT/mockup-kit/deploy-prototype.md" "$DEST/docs/mockup.md"
 
 echo "$VERSION" > "$DEST/.kit-version"
 ( cd "$DEST" && node .claude/kit/kit.mjs init ${CLOUDS:+--clouds "$CLOUDS"} $ALL )

@@ -1,6 +1,7 @@
 ---
 description: Đọc tài liệu dự án (FSD/BRD hoặc NotebookLM) và tự bật skill + tạo thư mục tài liệu phù hợp
 argument-hint: [--notebook <tên|url>] [--clouds a,b]
+allowed-tools: Bash(node .claude/kit/kit.mjs:*)
 ---
 Dùng skill `project-skill-sync` với: $ARGUMENTS
 1) Đọc nguồn (docs/brd, docs/fsd, NotebookLM nếu có MCP). 2) Lập bảng tín hiệu kèm bằng chứng. 3) Ghi `docs/skill-plan.md`

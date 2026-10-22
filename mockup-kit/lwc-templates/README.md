@@ -1,4 +1,4 @@
-# LWC Templates (prototype)
+# LWC Templates (mockup)
 
 | Template | Dùng cho | Test mẫu |
 |----------|----------|----------|
@@ -11,6 +11,6 @@
 
 ## Quy tắc
 - Mọi component import dữ liệu qua `c/mockDataProvider`. Khi khách chốt, thay thân hàm bằng Apex thật, giữ nguyên chữ ký.
-- `bootstrap.sh` copy cả thư mục này vào `prototype/lwc/` của dự án; `prototype` đã được khai báo trong `sfdx-project.json` nên deploy và Jest dùng được ngay.
+- `sf-kit init` đặt thư mục này ở `.claude/kit/mockup-templates/`; `mockup add <template> <tênMànHình>` copy vào source dự án (`lwc/<tênMànHình>`) kèm App Page, Tab và app Mockup.
 - Test mẫu dùng ID `BR-000`: đổi thành BR thật rồi cập nhật `docs/traceability.md`.
 - Dữ liệu giả sửa trong `mockDataProvider/mockData.js` (LWC không import được file JSON).

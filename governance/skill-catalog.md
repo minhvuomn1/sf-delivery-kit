@@ -9,7 +9,7 @@
 | experience-cloud | skill | Portal/community | | 1.0.0 | |
 | code-review | skill | Review workflow (có kiểm TDD/truy vết) | | 1.1.0 | |
 | debug-workflow | skill | Debug workflow | | 1.0.0 | |
-| mockup-prototype | skill | Dựng prototype từ journey | | 1.1.0 | |
+| mockup-prototype | skill | Dựng mockup làm thật trong source, gom trong app Mockup | | 2.0.0 | |
 | journey-mapping | skill | Yêu cầu -> journey/SCR/BR/AC | | 1.0.0 | |
 | tdd-workflow | skill | Red-Green-Refactor + truy vết BR | | 1.0.0 | |
 | lwc-templates (5) | template | listFilterTable, multiStepForm, kpiDashboard, approvalPanel, portalLayout | | 1.1.0 | |

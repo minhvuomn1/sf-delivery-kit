@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 // sf-kit: chạy TRONG thư mục dự án (giống `npm install` sinh node_modules).
-//   sf-kit init [--clouds a,b] [--all-skills] [--detect] [--with-template]   thêm .claude/, docs/, prototype/, CLAUDE.md... vào dự án CÓ SẴN (không ghi đè; --with-template mới copy thêm source mẫu)
+//   sf-kit init [--clouds a,b] [--all-skills] [--detect] [--with-template]   thêm .claude/, docs/, CLAUDE.md... vào dự án CÓ SẴN (không ghi đè; --with-template mới copy thêm source mẫu)
+//   sf-kit mockup add <template> <tênMànHình> | rename | split | templates   làm mockup thẳng trong source dự án, gom trong app "Mockup"
+//   sf-kit install-global                                   cài lệnh /sf-init cho Claude Code (một lần/máy)
 //   sf-kit detect [--apply]                                 quét docs/brd, docs/fsd, tìm cloud/skill cần bật
 //   sf-kit add-cloud <cloud...> | install <skill...> | list | registry
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import os from 'node:os';
 
 const KIT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cwd = process.cwd();
@@ -51,20 +54,26 @@ if (cmd === 'init') {
   copyTree(path.join(KIT, 'project-context-template'), path.join(cwd, 'docs'), s);
   fs.mkdirSync(path.join(cwd, 'docs/notes'), { recursive: true });
   copyTree(path.join(KIT, 'claude/mcp/README.md'), path.join(cwd, 'docs/mcp-setup.md'), s);
-  copyTree(path.join(KIT, 'mockup-kit/lwc-templates'), path.join(cwd, 'prototype/lwc'), s);
-  copyTree(path.join(KIT, 'mockup-kit/demo-script-template.md'), path.join(cwd, 'prototype/demo-script.md'), s);
-  fs.rmSync(path.join(cwd, 'prototype/lwc/README.md'), { force: true });
+  copyTree(path.join(KIT, 'mockup-kit/lwc-templates'), path.join(cwd, '.claude/kit/mockup-templates'), s); // template; `mockup add` copy vào source dự án
+  fs.rmSync(path.join(cwd, '.claude/kit/mockup-templates/README.md'), { force: true });
+  copyTree(path.join(KIT, 'mockup-kit/demo-script-template.md'), path.join(cwd, 'docs/demo-script.md'), s);
+  copyTree(path.join(KIT, 'mockup-kit/deploy-prototype.md'), path.join(cwd, 'docs/mockup.md'), s);
   fs.writeFileSync(path.join(cwd, '.kit-version'), `v${version}\n`);
   console.log(`>> ${s.created} file mới, ${s.skipped} file đã có (giữ nguyên)`);
   const clouds = flag('--clouds') || (args.find(a => a.startsWith('--clouds=')) || '').split('=')[1] || '';
   const r = runKit(['init', ...(clouds ? ['--clouds', clouds] : []), ...(has('--all-skills') ? ['--all'] : [])]);
   if (has('--detect')) runKit(['detect', '--apply']);
-  try { const sfdx = JSON.parse(fs.readFileSync(path.join(cwd, 'sfdx-project.json'), 'utf8'));
-    if (!(sfdx.packageDirectories || []).some(d => d.path === 'prototype')) console.log('>> Muốn deploy prototype: thêm { "path": "prototype" } vào packageDirectories trong sfdx-project.json (kit không tự sửa file này).'); } catch {}
+  console.log('>> Mockup: template nằm ở .claude/kit/mockup-templates. Tạo màn hình thật trong source + app Mockup: node .claude/kit/kit.mjs mockup add listFilterTable orderList --label "Đơn hàng"  (xem docs/mockup.md)');
   console.log(fs.existsSync(path.join(cwd, '.git')) ? '>> Nếu dự án dùng hook deploy của kit (scripts/install-git-hooks.sh) thì chạy nó; không thì bỏ qua.' : '>> Thư mục này chưa có git.');
   console.log('>> Tiếp theo: bỏ BRD/FSD vào docs/brd, docs/fsd; chạy `npx sf-kit detect` (quét nhanh) hoặc `/setup-skills` trong Claude Code (đọc cả PDF/docx/NotebookLM).');
   process.exit(r);
-} else if (['detect', 'add-cloud', 'install', 'list', 'registry'].includes(cmd)) {
+} else if (cmd === 'install-global') { // cài lệnh /sf-init vào ~/.claude/commands (một lần cho mỗi máy)
+  const dir = path.join(os.homedir(), '.claude', 'commands'); fs.mkdirSync(dir, { recursive: true });
+  const kitPath = KIT.split(path.sep).join('/');
+  const t = fs.readFileSync(path.join(KIT, 'claude/user-commands/sf-init.md'), 'utf8').split('{{KIT}}').join(kitPath);
+  fs.writeFileSync(path.join(dir, 'sf-init.md'), t);
+  console.log(`>> Đã cài lệnh /sf-init vào ${path.join(dir, 'sf-init.md')} (kit: ${kitPath}).\n>> Mở Claude Code ở thư mục dự án và gõ /sf-init. Nếu bạn di chuyển thư mục kit, chạy lại lệnh này.`);
+} else if (['detect', 'add-cloud', 'install', 'list', 'registry', 'mockup'].includes(cmd)) {
   if (!fs.existsSync(path.join(cwd, '.claude/kit/kit.mjs'))) { console.error('Chưa khởi tạo. Chạy `sf-kit init` trong thư mục dự án trước.'); process.exit(1); }
   process.exit(runKit([cmd, ...args]));
 } else {

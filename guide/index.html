@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sf-kit: Hướng dẫn sử dụng</title>
+<style>
+:root{--bg:#fff;--fg:#1d2733;--muted:#5b6876;--card:#f4f6f9;--line:#dde3ea;--accent:#0b5cab;--code:#eef1f5;--warn:#fff4e0;--warnline:#e0a030;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#14181d;--fg:#e6ebf0;--muted:#97a3b0;--card:#1c222a;--line:#2d3640;--accent:#6cb0ff;--code:#222a33;--warn:#2b2414;--warnline:#a67c1f;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{display:flex;max-width:1100px;margin:0 auto}
+nav{position:sticky;top:0;align-self:flex-start;width:240px;padding:24px 16px;height:100vh;overflow:auto;border-right:1px solid var(--line);flex-shrink:0}
+nav strong{display:block;margin-bottom:12px}
+nav a{display:block;padding:5px 8px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px}
+nav a:hover{background:var(--card);color:var(--fg)}
+main{padding:32px 32px 80px;min-width:0;flex:1}
+h1{margin-top:0}h2{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}h3{margin-top:28px}
+a{color:var(--accent)}
+code{background:var(--code);padding:1px 6px;border-radius:4px;font-size:.92em}
+pre{background:var(--code);padding:14px 16px;border-radius:8px;overflow-x:auto;line-height:1.5}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--card)}
+.note{background:var(--warn);border-left:4px solid var(--warnline);padding:10px 14px;border-radius:4px;margin:16px 0}
+.tag{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 8px;font-size:12px;color:var(--muted)}
+@media (max-width:800px){.wrap{display:block}nav{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+<strong>sf-kit v1.5.2</strong>
+<a href="#tong-quan">Tổng quan</a>
+<a href="#yeu-cau">Yêu cầu</a>
+<a href="#cai-dat">Cài đặt</a>
+<a href="#bat-dau">Bắt đầu nhanh</a>
+<a href="#tham-chieu">Tham chiếu lệnh</a>
+<a href="#setup-skills">/setup-skills</a>
+<a href="#cloud">Cloud có sẵn</a>
+<a href="#registry">Registry và mặc định</a>
+<a href="#cau-truc">Cấu trúc sinh ra</a>
+<a href="#notebooklm">NotebookLM</a>
+<a href="#workflow">Workflow hằng ngày</a>
+<a href="#nang-cap">Nâng cấp kit</a>
+<a href="#su-co">Xử lý sự cố</a>
+<a href="#gioi-han">Giới hạn đã biết</a>
+</nav>
+<main>
+<h1>sf-kit: Hướng dẫn sử dụng</h1>
+<p>Bộ công cụ chuẩn hóa dự án Salesforce kết hợp Claude Code. Chạy một lệnh trong thư mục dự án có sẵn, kit thêm thư mục tài liệu (BRD, FSD, UAT, thư mục theo cloud), skill, agent, lệnh Claude Code và cấu hình MCP, rồi chọn skill theo tài liệu của dự án.</p>
+
+<h2 id="tong-quan">1. Tổng quan</h2>
+<table>
+<tr><th>Thành phần</th><th>Làm gì</th></tr>
+<tr><td><code>sf-kit init</code></td><td>Thêm <code>.claude/</code>, <code>docs/</code>, <code>CLAUDE.md</code>, <code>.mcp.json</code> vào dự án có sẵn. Không ghi đè file đã có.</td></tr>
+<tr><td><code>sf-kit detect</code></td><td>Quét <code>docs/brd</code>, <code>docs/fsd</code>, <code>docs/00-overview.md</code> bằng từ khóa, đề xuất hoặc bật cloud và skill.</td></tr>
+<tr><td><code>/setup-skills</code></td><td>Lệnh trong Claude Code. Agent đọc tài liệu (kể cả PDF/docx) hoặc NotebookLM, ghi kế hoạch, chờ bạn xác nhận rồi bật skill.</td></tr>
+<tr><td><code>add-cloud</code>, <code>install</code>, <code>list</code></td><td>Thêm cloud, bật một skill cụ thể, xem trạng thái.</td></tr>
+</table>
+<p>Skill của kit nằm trong <code>.claude/skill-catalog/</code> (Claude Code không tự nạp). Skill được bật sẽ copy sang <code>.claude/skills/</code>. Danh sách và lý do bật được ghi trong <code>.claude/skills.lock.json</code>.</p>
+
+<h2 id="yeu-cau">2. Yêu cầu</h2>
+<ul>
+<li>Node.js 18 trở lên (<code>node -v</code>). Kit không dùng gói npm ngoài.</li>
+<li>Dự án Salesforce có sẵn (có <code>sfdx-project.json</code>). Thư mục trống thì thêm <code>--with-template</code>.</li>
+<li>Claude Code để dùng <code>/setup-skills</code> và các lệnh khác.</li>
+<li>Salesforce CLI (<code>sf</code>) cho các skill deploy và MCP Salesforce.</li>
+</ul>
+
+<h2 id="cai-dat">3. Cài đặt</h2>
+<p>Chọn một trong ba cách. Cách 1 và 2 đều không cần npm.</p>
+<h3>Cách 1. Clone kit rồi chạy bằng node (khuyến nghị trên Windows)</h3>
+<pre><code>git clone https://github.com/minhvuomn1/sf-delivery-kit.git D:\tools\sf-delivery-kit
+cd D:\OMN1\ten-du-an
+node D:\tools\sf-delivery-kit\bin\sf-kit.mjs init --clouds mce</code></pre>
+<p>Sau <code>init</code>, các lệnh còn lại chạy bằng <code>node .claude\kit\kit.mjs &lt;lệnh&gt;</code>, không cần đường dẫn kit.</p>
+<div class="note"><b><code>&lt;KIT&gt;</code> là gì?</b> Là đường dẫn tới thư mục kit trên máy bạn, tức thư mục có <code>package.json</code> và thư mục <code>bin\</code> bên trong. Đây là thư mục khác với dự án cần thêm kit; không chạy <code>init</code> bên trong thư mục kit.
+<pre><code>:: kiểm tra đúng thư mục: phải thấy sf-kit.mjs
+dir D:\tools\sf-delivery-kit\bin
+
+:: ví dụ đầy đủ (chạy ở thư mục dự án)
+cd D:\OMN1\ten-du-an
+node D:\tools\sf-delivery-kit\bin\sf-kit.mjs init --clouds mce
+
+:: đường dẫn có dấu cách thì bọc nháy kép
+node "D:\OMN1\my folder\sf-delivery-kit\bin\sf-kit.mjs" init</code></pre>
+Nếu giải nén từ zip, thư mục kit có thể nằm lồng một cấp, ví dụ <code>D:\OMN1\sf-delivery-kit-v1.5.1\sf-delivery-kit</code>. Mẹo: trong File Explorer mở thư mục <code>bin</code>, bấm vào thanh địa chỉ để copy đường dẫn, rồi thêm <code>\sf-kit.mjs</code> vào cuối.</div>
+<h3>Cách 2. Cài từ git như một dependency</h3>
+<pre><code>npm install --save-dev git+https://github.com/minhvuomn1/sf-delivery-kit.git
+npx sf-kit init</code></pre>
+<div class="note">Cài từ thư mục cục bộ (<code>npm install D:\...</code>) từng gây lỗi <code>EPERM mkdir 'D:\'</code> trên Windows vì npm tạo symlink. Cài từ git URL chưa được thử trên Windows; nếu lỗi, quay lại cách 1.</div>
+<h3>Cách 3. Cài toàn cục</h3>
+<pre><code>npm install -g git+https://github.com/minhvuomn1/sf-delivery-kit.git
+sf-kit init</code></pre>
+
+<h2 id="bat-dau">4. Bắt đầu nhanh</h2>
+<pre><code>cd ten-du-an
+node &lt;KIT&gt;\bin\sf-kit.mjs init                 # 1. thêm khung kit, bật skill core
+# 2. bỏ BRD/FSD (.md/.txt) vào docs\brd, docs\fsd
+node .claude\kit\kit.mjs detect                    # 3. xem trước cloud/skill phát hiện được
+node .claude\kit\kit.mjs detect --apply            # 4. bật và ghi docs\skill-plan.md
+node .claude\kit\kit.mjs list                      # 5. kiểm tra</code></pre>
+<p>Trong các lệnh trên, <code>&lt;KIT&gt;</code> là đường dẫn thư mục kit (xem ví dụ ở mục 3, Cách 1). Rồi mở Claude Code ở thư mục dự án và chạy <code>/setup-skills</code> để agent rà lại, đặc biệt khi tài liệu là PDF/docx hoặc nằm trong NotebookLM.</p>
+<p>Sau <code>init</code> nên commit <code>.claude/</code>, <code>docs/</code>, <code>CLAUDE.md</code>, <code>.kit-version</code> để cả team dùng chung. Không commit token hay file <code>.env*</code>.</p>
+
+<h3>Dùng lệnh Claude thay cho lệnh node</h3>
+<p>Hầu hết thao tác có thể gõ trực tiếp trong Claude Code dưới dạng slash command. Chỉ cần chạy bằng node <b>một lần cho mỗi máy</b> để cài lệnh <code>/sf-init</code>:</p>
+<pre><code>node &lt;KIT&gt;\bin\sf-kit.mjs install-global</code></pre>
+<p>Lệnh này ghi <code>sf-init.md</code> vào thư mục lệnh cá nhân của Claude Code (<code>~/.claude/commands</code>, trên Windows là <code>C:\Users\&lt;tên&gt;\.claude\commands</code>), kèm đường dẫn kit. Nếu bạn di chuyển thư mục kit, chạy lại. Sau đó, trong mọi dự án:</p>
+<table>
+<tr><th>Lệnh</th><th>Làm gì</th></tr>
+<tr><td><code>/sf-init [--clouds mce,sales-cloud] [--detect]</code></td><td>Thêm kit vào dự án hiện tại (tương đương <code>sf-kit init</code>). Chạy một lần, rồi mở lại phiên Claude Code để thấy các lệnh dưới đây.</td></tr>
+<tr><td><code>/setup-skills</code></td><td>Đọc BRD/FSD hoặc NotebookLM, đề xuất cloud và skill, chờ bạn xác nhận rồi bật.</td></tr>
+<tr><td><code>/add-cloud mce</code></td><td>Thêm một cloud (tài liệu <code>docs/&lt;cloud&gt;/</code> và skill kèm theo).</td></tr>
+<tr><td><code>/mockup SCR-01</code> hoặc <code>/mockup listFilterTable orderList "Đơn hàng"</code></td><td>Dựng mockup thật cho một màn hình: LWC + App Page + Tab trong app Mockup. Claude tạo file và chờ bạn xác nhận trước khi deploy.</td></tr>
+<tr><td><code>/mockup-app rename "Đặt hàng"</code>, <code>/mockup-app split OrderApp orderList,approvals</code></td><td>Đổi tên app Mockup hoặc kéo màn hình ra app riêng.</td></tr>
+<tr><td><code>/kit-status</code></td><td>Xem cloud và skill đang bật.</td></tr>
+<tr><td><code>/journey</code>, <code>/tdd</code>, <code>/review</code>, <code>/validate</code>, <code>/new-feature</code>, <code>/handover</code></td><td>Các lệnh quy trình có từ trước.</td></tr>
+</table>
+<p>Các lệnh này khai báo sẵn quyền chạy <code>node .claude/kit/kit.mjs</code> nên không hỏi lại từng lần. Deploy lên org luôn cần bạn xác nhận. Quyền ghi của lệnh nằm trong dòng <code>allowed-tools</code> ở đầu mỗi file trong <code>.claude/commands/</code>, bạn có thể xem và chỉnh.</p>
+
+<h2 id="tham-chieu">5. Tham chiếu lệnh</h2>
+<p>Có hai điểm vào: <code>sf-kit</code> (từ kit, dùng cho <code>init</code>) và <code>.claude/kit/kit.mjs</code> (nằm trong dự án, dùng cho mọi lệnh khác).</p>
+<table>
+<tr><th>Lệnh</th><th>Mô tả</th></tr>
+<tr><td><code>init [--clouds a,b] [--all-skills] [--detect] [--with-template]</code></td><td>Khởi tạo. <code>--clouds</code>: cloud đã biết. <code>--all-skills</code>: bật toàn bộ skill. <code>--detect</code>: quét và bật luôn. <code>--with-template</code>: copy thêm source mẫu (chỉ cho thư mục trống). Chạy lại an toàn.</td></tr>
+<tr><td><code>detect [--apply]</code></td><td>Không có <code>--apply</code>: chỉ in kết quả. Có <code>--apply</code>: bật cloud/skill đủ bằng chứng và ghi <code>docs/skill-plan.md</code>.</td></tr>
+<tr><td><code>add-cloud &lt;cloud...&gt;</code></td><td>Sinh <code>docs/&lt;cloud&gt;/</code> và bật skill của cloud. Không ghi đè tài liệu đã có.</td></tr>
+<tr><td><code>install &lt;skill...&gt; [--reason "..."]</code></td><td>Bật skill từ catalog, ghi lý do vào lock.</td></tr>
+<tr><td><code>list</code></td><td>Cloud đã bật, cloud có sẵn, skill <code>[x]</code> đang bật / <code>[ ]</code> chưa bật.</td></tr>
+<tr><td><code>registry</code></td><td>In <code>skill-registry.json</code> (agent dùng để khớp tín hiệu).</td></tr>
+<tr><td><code>mockup add &lt;template&gt; &lt;tênMànHình&gt; [--label ".."]</code></td><td>Tạo màn hình thật trong source dự án (LWC + App Page + Tab), gắn vào app <code>Mockup</code> và permission set <code>Mockup_Access</code>, in lệnh deploy. Xem mục 9.</td></tr>
+<tr><td><code>mockup rename --label ".."</code> / <code>mockup split &lt;App&gt; --screens a,b</code> / <code>mockup templates</code></td><td>Đổi tên hiển thị app, kéo màn hình ra app riêng, liệt kê template.</td></tr>
+</table>
+
+<h2 id="setup-skills">6. /setup-skills</h2>
+<ol>
+<li>Agent đọc <code>docs/brd</code>, <code>docs/fsd</code>, <code>docs/00-overview.md</code>. Nếu có MCP NotebookLM thì hỏi thêm notebook theo 6 câu chuẩn.</li>
+<li>Lập bảng tín hiệu: tín hiệu, loại, trích dẫn ngắn, nguồn. Tín hiệu chung chung phải có từ 2 chỗ độc lập trở lên hoặc được hỏi lại.</li>
+<li>Khớp với registry, ghi <code>docs/skill-plan.md</code> gồm: đã bật (core), đề xuất, cần xác nhận, skill ngoài kit.</li>
+<li><b>Dừng và hỏi bạn.</b> Chỉ sau khi bạn đồng ý mới chạy <code>add-cloud</code> / <code>install</code>.</li>
+<li>Cập nhật dòng cloud trong <code>CLAUDE.md</code>, nhắc commit.</li>
+</ol>
+<p>Skill ngoài kit được tìm bằng skill <code>find-skills</code> (<code>npx skills find</code>). Agent chỉ đề xuất, không tự cài.</p>
+<p>Lệnh liên quan: <code>/add-cloud &lt;cloud&gt;</code>, <code>/journey</code>, <code>/tdd</code>, <code>/review</code>, <code>/validate</code>, <code>/new-feature</code>, <code>/handover</code>.</p>
+
+<h2 id="cloud">7. Cloud có sẵn trong kit</h2>
+<p>Kit hiện có 5 cloud profile. Cột "Trạng thái" cho biết mức độ tin cậy của từng cái.</p>
+<table>
+<tr><th>ID</th><th>Sinh ra</th><th>Skill kèm theo</th><th>Trạng thái</th></tr>
+<tr><td><code>sales-cloud</code></td><td><code>docs/sales-cloud/</code>: sales-process, forecast-territory-quote</td><td>không</td><td>Chỉ có template tài liệu</td></tr>
+<tr><td><code>service-cloud</code></td><td><code>docs/service-cloud/</code>: case-lifecycle, sla-entitlement, channels-knowledge</td><td>không</td><td>Chỉ có template tài liệu</td></tr>
+<tr><td><code>experience-cloud</code></td><td><code>docs/experience-cloud/</code>: site-map, user-access, branding-theme</td><td>experience-cloud, frontend-design</td><td>Skill là của team (có từ kit v1.0 và v1.3); template tài liệu mới</td></tr>
+<tr><td><code>mce</code></td><td><code>docs/mce/</code>: business-units, data-extensions, journeys, automations, mc-connect, queries/, templates/</td><td>mce-development</td><td><b>BẢN MẪU</b> <span class="tag">starter v0.1</span></td></tr>
+<tr><td><code>manufacturing</code></td><td><code>docs/manufacturing/</code>: sales-agreements, forecasting, rebates, run-rate</td><td>manufacturing-cloud</td><td><b>BẢN MẪU</b> <span class="tag">starter v0.1</span></td></tr>
+</table>
+<div class="note"><b>Cloud MCE (và Manufacturing) là bản mẫu.</b> Template tài liệu và skill <code>mce-development</code> được viết từ kiến thức chung để làm khung, chưa được kiểm chứng với tài liệu Salesforce hiện hành và chưa có người có kinh nghiệm MCE review. Danh sách mục trong <code>docs/mce/</code> (Business Unit, Data Extension, Journey, Automation, MC Connect) là gợi ý, không phải chuẩn của team. Trước khi dùng cho khách: nhờ người làm MCE rà lại skill, sửa template cho khớp cách làm thật, rồi mới tăng phiên bản lên 1.0. Khi chạy <code>add-cloud mce</code>, kit cũng in cảnh báo này.</div>
+<p>Mọi dự án đều có <code>docs/brd/</code>, <code>docs/fsd/</code>, <code>docs/uat/</code>, <code>journeys/</code>, <code>decisions/</code>, <code>tasks/</code>, <code>traceability.md</code>. Các cloud khác (Data Cloud, CPQ/Revenue Cloud, Field Service...) chưa có profile.</p>
+<p>Thêm profile mới: tạo <code>cloud-profiles/&lt;tên&gt;/profile.json</code> (<code>name</code>, <code>label</code>, <code>skills</code>, <code>folders</code>, <code>status</code>: <code>sample</code> | <code>template-only</code> | <code>team-skill</code>) và thư mục <code>docs/&lt;tên&gt;/</code> chứa template, rồi thêm mục trong <code>claude/skill-registry.json</code>.</p>
+
+<h2 id="registry">8. Registry và mặc định</h2>
+<p>File <code>claude/skill-registry.json</code> (trong dự án: <code>.claude/kit/skill-registry.json</code>) quyết định:</p>
+<ul>
+<li><code>core</code>: skill luôn bật khi <code>init</code>. Gồm salesforce, salesforce-developer, mockup-prototype, journey-mapping, tdd-workflow, code-review, debug-workflow, jira-to-code-workflow, deploy-checklist, apex-conventions, apex-test-generator, lwc-patterns, sf-platform-gotchas, find-skills, project-skill-sync. Các lệnh <code>/tdd</code>, <code>/review</code>, <code>/validate</code>, <code>/new-feature</code> cần những skill này.</li>
+<li><code>clouds</code>: từ khóa nhận diện từng cloud.</li>
+<li><code>conditional</code>: từ khóa bật skill lẻ (kèm <code>also</code> cho skill đi cùng).</li>
+<li><code>generic</code>: từ khóa dễ trùng nghĩa (case, lead, portal...). <code>detect</code> chỉ tự bật khi có ít nhất 1 từ khóa đặc thù hoặc ít nhất 3 từ khóa khác nhau.</li>
+</ul>
+<div class="note">Skill <code>salesforce</code> là skill của Membrane (cần tài khoản Membrane), không phải skill phát triển Apex/LWC. Nếu không dùng Membrane, bỏ nó khỏi <code>core</code>.</div>
+
+<h2 id="cau-truc">9. Cấu trúc sinh ra trong dự án</h2>
+<pre><code>.claude/
+  skills/           skill đang bật (Claude Code nạp)
+  skill-catalog/    toàn bộ skill của kit (chưa bật)
+  commands/         /setup-skills, /add-cloud, /journey, /tdd ...
+  agents/           fsd-analyst, task-reader, uat-verifier ...
+  kit/              kit.mjs, skill-registry.json, cloud-profiles/
+  settings.json     quyền cho phép/chặn
+  skills.lock.json  skill/cloud đã bật và lý do
+docs/               brd, fsd, uat, journeys, decisions, tasks, theo cloud...
+CLAUDE.md  .mcp.json  .kit-version</code></pre>
+<h3>Mockup là code thật, gom trong app "Mockup"</h3>
+<p>Mockup không nằm trong thư mục riêng. Mỗi màn hình là một LWC thật trong source dự án (<code>force-app/main/default/lwc</code>), kèm App Page và Tab, và tất cả được gom trong một Lightning App tên <b>Mockup</b> dùng dữ liệu giả qua <code>c/mockDataProvider</code>. Template nằm ở <code>.claude/kit/mockup-templates/</code> (listFilterTable, multiStepForm, kpiDashboard, approvalPanel, portalLayout) và không bị deploy.</p>
+<pre><code>node .claude\kit\kit.mjs mockup templates
+node .claude\kit\kit.mjs mockup add listFilterTable orderList --label "Đơn hàng" -o &lt;alias-sandbox&gt;
+node .claude\kit\kit.mjs mockup add approvalPanel approvals</code></pre>
+<p><code>mockup add &lt;template&gt; &lt;tênMànHình&gt;</code> làm các việc sau:</p>
+<ul>
+<li>Copy template vào <code>lwc/&lt;tênMànHình&gt;</code>, đổi tên file và định danh bên trong (kể cả test Jest), đồng bộ <code>apiVersion</code> theo <code>sourceApiVersion</code> của dự án.</li>
+<li>Tạo App Page <code>Mockup_&lt;tênMànHình&gt;</code> và Tab cùng tên, gắn vào app <code>Mockup</code> và permission set <code>Mockup_Access</code>.</li>
+<li>Lần đầu còn tạo app, permission set và <code>mockDataProvider</code>. Chạy lại cho màn hình khác; không ghi đè file đã có hay đã sửa. <code>tênMànHình</code> phải là camelCase.</li>
+<li>In sẵn lệnh deploy đúng các metadata vừa tạo (dạng <code>sf project deploy validate -m "LightningComponentBundle:orderList" -m "FlexiPage:Mockup_orderList" ...</code>) và lệnh <code>sf org assign permset -n Mockup_Access</code>.</li>
+</ul>
+<p>Sau khi deploy, mở App Launcher và chọn app "Mockup". Demo theo <code>docs/demo-script.md</code>, ghi trạng thái từng màn hình (Mock/Thật) vào <code>docs/screens.md</code>. Cũng có thể nhờ Claude Code: "dựng mockup cho SCR-01" (skill <code>mockup-prototype</code> dựa trên <code>docs/journeys/</code> và <code>docs/screens.md</code>).</p>
+<h3>Khi làm chính thức</h3>
+<p>Không cần di chuyển file vì mọi thứ đã nằm trong source dự án.</p>
+<pre><code>node .claude\kit\kit.mjs mockup rename --label "Đặt hàng"                                  :: đổi tên hiển thị của app
+node .claude\kit\kit.mjs mockup split OrderApp --screens orderList,approvals --label "Order"   :: kéo màn hình ra app riêng</code></pre>
+<p><code>rename</code> chỉ đổi tên hiển thị (API name vẫn là <code>Mockup</code>). <code>split</code> tạo app mới cùng permission set <code>OrderApp_Access</code> và gỡ các màn hình đó khỏi app Mockup; tab và App Page vẫn giữ tên <code>Mockup_&lt;màn hình&gt;</code> (tên nội bộ, người dùng không thấy). Sau đó thay dần thân hàm trong <code>mockDataProvider</code> bằng Apex thật, giữ nguyên chữ ký.</p>
+<div class="note">Metadata của app, tab, App Page và permission set được sinh theo định dạng Salesforce nhưng <b>chưa được thử deploy trên org thật</b>. Luôn chạy <code>deploy validate</code> trước; nếu có lỗi (ví dụ giá trị <code>motif</code> của tab, template của App Page), gửi thông báo lỗi để sửa. Chỉ deploy mockup lên sandbox. Cần <code>**/__tests__/**</code> trong <code>.forceignore</code> để test Jest không bị deploy (lệnh sẽ cảnh báo nếu thiếu). Dự án đã chạy <code>init</code> bản cũ: xóa thư mục <code>prototype/</code> và dòng <code>{ "path": "prototype" }</code> trong <code>sfdx-project.json</code> nếu có.</div>
+
+<h2 id="notebooklm">10. NotebookLM (tùy chọn)</h2>
+<pre><code>claude mcp add notebooklm -- npx notebooklm-mcp@latest</code></pre>
+<p>Sau đó nhờ Claude chạy <code>setup_auth</code> để đăng nhập Google một lần, rồi <code>/setup-skills --notebook &lt;tên&gt;</code>.</p>
+<ul>
+<li>Đây là MCP cộng đồng (PleasePrompto/notebooklm-mcp), không phải của Google hay Anthropic, điều khiển trình duyệt bằng tài khoản Google của bạn.</li>
+<li>Thử trước, rồi pin phiên bản thay cho <code>@latest</code>.</li>
+<li>Chỉ nạp tài liệu khách hàng nếu hợp đồng cho phép dữ liệu đi qua Google.</li>
+<li>Kit chưa được thử với notebook thật.</li>
+</ul>
+<p>Các MCP khác (Salesforce DEV/UAT, Jira, Playwright) cấu hình trong <code>.mcp.json</code>, hướng dẫn thiết lập máy ở <code>docs/mcp-setup.md</code>.</p>
+
+<h2 id="workflow">11. Workflow hằng ngày</h2>
+<p>Yêu cầu → <code>/journey</code> → mockup → <code>/tdd</code> → <code>/validate</code> → <code>/review</code> → PR. Cuối phiên chạy <code>/handover</code>.</p>
+<p>ID truy vết xuyên suốt: J-xx → SCR-xx → BR-xx → test → ticket, ghi trong <code>docs/traceability.md</code>. Business rule do agent suy ra phải đánh dấu "(đề xuất - cần xác nhận)" cho đến khi người phụ trách nghiệp vụ chốt.</p>
+<p>FSD đổi phạm vi hoặc thêm cloud: chạy lại <code>detect</code> hoặc <code>/setup-skills</code>. Kit không tự gỡ skill; skill hết bằng chứng chỉ được báo "có thể gỡ".</p>
+
+<h2 id="nang-cap">12. Nâng cấp kit</h2>
+<ol>
+<li><code>git pull</code> trong thư mục kit (hoặc cập nhật dependency).</li>
+<li>Chạy lại <code>init</code> trong dự án. Registry được ghi đè theo kit; file đã có khác thì giữ nguyên.</li>
+<li>Skill đã bật không tự cập nhật. So sánh <code>.claude/skills/&lt;tên&gt;</code> với <code>.claude/skill-catalog/&lt;tên&gt;</code> và copy lại những cái cần, giữ skill có tiền tố <code>project-</code>.</li>
+<li>Đọc <code>CHANGELOG.md</code> và <code>.kit-version</code> trước khi nâng.</li>
+</ol>
+
+<h2 id="su-co">13. Xử lý sự cố</h2>
+<table>
+<tr><th>Hiện tượng</th><th>Cách xử lý</th></tr>
+<tr><td><code>npm error EPERM mkdir 'D:\'</code></td><td>Lỗi npm khi cài thư mục cục bộ trên Windows. Dùng cách 1 (chạy bằng node), hoặc cài từ git URL.</td></tr>
+<tr><td><code>Chưa khởi tạo. Chạy sf-kit init</code></td><td>Bạn đang ở sai thư mục, hoặc chưa chạy <code>init</code>. Lệnh <code>kit.mjs</code> cần chạy ở gốc dự án.</td></tr>
+<tr><td>Skill vừa bật mà Claude Code không thấy</td><td>Thoát và mở lại phiên Claude Code.</td></tr>
+<tr><td><code>detect</code> không thấy gì</td><td>Chỉ quét <code>.md .txt .csv .json .yml .html</code> trong <code>docs/brd</code>, <code>docs/fsd</code>, <code>00-overview.md</code>. File PDF/docx được liệt kê là "bỏ qua": dùng <code>/setup-skills</code>.</td></tr>
+<tr><td><code>detect</code> bật nhầm / bỏ sót</td><td>Xem bằng chứng trong <code>docs/skill-plan.md</code>. Bật tay bằng <code>install</code> hoặc chỉnh <code>signals</code> trong registry.</td></tr>
+<tr><td><code>! xxx: không có trong .claude/skill-catalog</code></td><td>Sai tên skill. Xem tên bằng <code>list</code>. Skill ngoài kit thì dùng <code>find-skills</code>.</td></tr>
+<tr><td>Muốn làm lại từ đầu</td><td>Xem <code>git status</code>, xóa <code>.claude/</code>, <code>docs/</code> (phần do kit sinh), <code>CLAUDE.md</code>, <code>.mcp.json</code>, <code>.kit-version</code>, rồi chạy lại <code>init</code>.</td></tr>
+</table>
+
+<h2 id="gioi-han">14. Giới hạn đã biết</h2>
+<ul>
+<li><code>detect</code> chỉ khớp từ khóa, không hiểu ngữ cảnh. Kết quả cần được người rà lại, hoặc dùng <code>/setup-skills</code>.</li>
+<li>Kit đã được thử trên Linux; trên Windows mới có phản hồi về lỗi npm ở trên.</li>
+<li>Hook pre-push deploy của kit (<code>scripts/deploy-changes.sh</code>) chỉ có trong <code>project-template</code>, không được copy vào dự án có sẵn.</li>
+<li>MCE không deploy bằng <code>sf</code> CLI. Tài liệu trong <code>docs/mce/</code> là nguồn truy vết chính.</li>
+<li>NotebookLM MCP chưa được kiểm thử với notebook thật.</li>
+</ul>
+</main>
+</div>
+</body>
+</html>

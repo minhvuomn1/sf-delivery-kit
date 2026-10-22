@@ -1,1 +1,9 @@
-{ "name": "service-cloud", "label": "Service Cloud", "skills": [], "folders": ["docs/service-cloud/sample-data"] }
+{
+  "name": "service-cloud",
+  "label": "Service Cloud",
+  "skills": [],
+  "folders": [
+    "docs/service-cloud/sample-data"
+  ],
+  "status": "template-only"
+}

@@ -1,1 +1,12 @@
-{ "name": "mce", "label": "Marketing Cloud Engagement", "skills": ["mce-development"], "folders": ["docs/mce/queries", "docs/mce/templates"] }
+{
+  "name": "mce",
+  "label": "Marketing Cloud Engagement",
+  "skills": [
+    "mce-development"
+  ],
+  "folders": [
+    "docs/mce/queries",
+    "docs/mce/templates"
+  ],
+  "status": "sample"
+}
