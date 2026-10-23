@@ -1,4 +1,8 @@
 # Changelog
+## v1.10.0
+- Lệnh `sf-kit upgrade [--pull] [--dry-run]`: cập nhật dự án đã init lên kit mới. Ghi đè file kit (skill-catalog, skill đang bật, agents, commands, `.claude/kit/`) và lưu bản cũ ở `.claude/.upgrade-backup/`; giữ `project-*`. `--pull` chạy `git pull --ff-only` trong thư mục kit trước.
+- `CLAUDE.md` gộp 3 chiều (base lưu ở `.claude/kit/CLAUDE.base.md`); xung đột ghi `CLAUDE.md.new`. `settings.json` ghi bản `.new`. In CHANGELOG từ `.kit-version` đến bản mới.
+- `init` ghi `.claude/kit/CLAUDE.base.md`. Cập nhật `governance/upgrade-guide.md` và guide mục 12.
 ## v1.9.0
 - Quy ước mới: không viết comment trong code (Apex, LWC, test); ID business rule ghi trong tên test. Áp dụng vào CLAUDE.template, apex-conventions, lwc-patterns, tdd-workflow, coding-convention, review-checklist; apex-reviewer coi comment là blocker. Đã gỡ comment khỏi template mockup-kit và TestDataFactory.
 - Quy ước refresh: mọi LWC/Apex action đổi dữ liệu phải làm mới giao diện ngay (`refreshApex`, `notifyRecordUpdateAvailable`, `RefreshEvent`, xóa `draftValues`).
