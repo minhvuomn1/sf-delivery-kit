@@ -220,9 +220,10 @@ node .claude\kit\kit.mjs mockup split OrderApp --screens orderList,approvals --l
 <h2 id="nang-cap">12. Nâng cấp kit</h2>
 <ol>
 <li><code>git pull</code> trong thư mục kit (hoặc cập nhật dependency).</li>
-<li>Chạy lại <code>init</code> trong dự án. Registry được ghi đè theo kit; file đã có khác thì giữ nguyên.</li>
-<li>Skill đã bật không tự cập nhật. So sánh <code>.claude/skills/&lt;tên&gt;</code> với <code>.claude/skill-catalog/&lt;tên&gt;</code> và copy lại những cái cần, giữ skill có tiền tố <code>project-</code>.</li>
-<li>Đọc <code>CHANGELOG.md</code> và <code>.kit-version</code> trước khi nâng.</li>
+<li>Trong thư mục dự án chạy <code>sf-kit upgrade --pull --dry-run</code> để xem trước, rồi chạy <code>sf-kit upgrade --pull</code> (<code>--pull</code> = <code>git pull --ff-only</code> trong thư mục kit trước; thiếu cờ này lệnh không tự pull). Không dùng lại <code>init</code>, vì <code>init</code> không ghi đè file đã có.</li>
+<li>Skill, agent, command và <code>.claude/kit/</code> được ghi đè theo kit (bản cũ lưu ở <code>.claude/.upgrade-backup/</code>); skill có tiền tố <code>project-</code> được giữ nguyên.</li>
+<li><code>CLAUDE.md</code> được gộp 3 chiều: không xung đột thì ghi thẳng, có xung đột thì ghi <code>CLAUDE.md.new</code> có dấu <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> để bạn xử lý. <code>.claude/settings.json</code> không bị ghi đè, lệnh ghi bản <code>.new</code> để gộp tay.</li>
+<li>Lệnh in CHANGELOG từ <code>.kit-version</code> của dự án đến bản mới và cập nhật <code>.kit-version</code>.</li>
 </ol>
 
 <h2 id="su-co">13. Xử lý sự cố</h2>
