@@ -9,7 +9,7 @@ Chuẩn viết test (TestDataFactory, bulk/negative, assert, coverage) nằm ở
 
 ## Vòng lặp cho mỗi acceptance criterion
 1. **Chọn 1 AC** (từ `docs/journeys/*` hoặc ticket) và BR tương ứng.
-2. **RED**: viết test cho AC đó, tên/comment ghi ID BR. **Chạy và xác nhận test fail đúng lý do** (không phải lỗi biên dịch hay thiếu data).
+2. **RED**: viết test cho AC đó, tên test ghi ID BR (không comment). **Chạy và xác nhận test fail đúng lý do** (không phải lỗi biên dịch hay thiếu data).
 3. **GREEN**: viết code ít nhất để pass. Không thêm tính năng ngoài test.
 4. **REFACTOR**: dọn code (theo `apex-conventions`/`lwc-patterns`) khi test vẫn xanh; chạy lại toàn bộ test của class/component.
 5. **Cập nhật** `docs/traceability.md` (Red -> Green -> Done). Lặp lại với AC kế tiếp.
@@ -25,7 +25,7 @@ Chuẩn viết test (TestDataFactory, bulk/negative, assert, coverage) nằm ở
 Mẹo để vòng lặp nhanh: đặt logic nghiệp vụ vào class service thuần (không phụ thuộc UI/trigger) và logic hiển thị vào LWC có Jest, vì Jest chạy local tức thì, Apex test phải chạy trên org.
 
 ## Truy vết
-- Apex: `submit_missingApprover_throwsError` kèm comment `// BR-004`.
+- Apex: `submit_BR004_missingApprover_throwsError` (ID BR nằm trong tên method, không dùng comment).
 - Jest: `it('BR-004: ...')`.
 - Mỗi BR có >= 1 test (happy path) và >= 1 test ngoại lệ nếu BR có điều kiện lỗi.
 - Bug: viết test tái hiện (RED) **trước** khi sửa.

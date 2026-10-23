@@ -127,7 +127,7 @@ public static void submitOrder(Id orderId) {
 
 ## 5. Security
 
-- Declare sharing explicitly on every class: `with sharing` by default. Use `without sharing` only with a comment explaining why, and keep that class as small as possible. Use `inherited sharing` for utility classes.
+- Declare sharing explicitly on every class: `with sharing` by default. Use `without sharing` only when unavoidable (state the reason in the PR, not in code), and keep that class as small as possible. Use `inherited sharing` for utility classes.
 - Enforce CRUD/FLS in user-facing code: `WITH USER_MODE` on SOQL, `Database.insert(records, AccessLevel.USER_MODE)` for DML, or `Security.stripInaccessible()` when you need to drop fields silently.
 - Never build dynamic SOQL by concatenating user input. Use bind variables (`Database.queryWithBinds`) or `String.escapeSingleQuotes()`.
 - No hardcoded Ids, URLs, or credentials. Use Custom Metadata, Custom Settings, Named Credentials, or `Schema.SObjectType.X.getRecordTypeInfosByDeveloperName()`.

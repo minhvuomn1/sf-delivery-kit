@@ -80,6 +80,8 @@ Parameters passed to Apex must match the Apex parameter names exactly. Pass plai
 
 ## 3. Refreshing data after save
 
+**Mandatory:** every save/create/delete/status change or imperative Apex call that changes data must refresh the UI immediately (no F5). Also refresh the record page/tab via `notifyRecordUpdateAvailable` or `RefreshEvent`. Never write comments in LWC/Apex code; use clear names.
+
 This is the most common bug source. Pick the right tool:
 
 - **Data from an Apex `@wire`** → `refreshApex(this.wiredLinesResult)`. You must pass the *entire* object the wire provisioned (stored above), not `data`. Refreshing does nothing for data loaded imperatively.

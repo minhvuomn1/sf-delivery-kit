@@ -1,4 +1,8 @@
 # Changelog
+## v1.9.0
+- Quy ước mới: không viết comment trong code (Apex, LWC, test); ID business rule ghi trong tên test. Áp dụng vào CLAUDE.template, apex-conventions, lwc-patterns, tdd-workflow, coding-convention, review-checklist; apex-reviewer coi comment là blocker. Đã gỡ comment khỏi template mockup-kit và TestDataFactory.
+- Quy ước refresh: mọi LWC/Apex action đổi dữ liệu phải làm mới giao diện ngay (`refreshApex`, `notifyRecordUpdateAvailable`, `RefreshEvent`, xóa `draftValues`).
+- Thêm agent `jira-reader` (chỉ đọc ticket Jira, trả tóm tắt + AC); lệnh `/new-feature` dùng agent này.
 ## v1.8.0
 - Lệnh Claude thay cho lệnh node: `/mockup`, `/mockup-app`, `/kit-status` (trong dự án), `/sf-init` (cài một lần bằng `sf-kit install-global`, ghi vào ~/.claude/commands kèm đường dẫn kit). Các lệnh kit khai báo `allowed-tools` cho `node .claude/kit/kit.mjs`; deploy vẫn cần xác nhận.
 ## v1.7.1

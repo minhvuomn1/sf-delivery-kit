@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import { getKpis } from 'c/mockDataProvider'; // TODO: thay bằng Apex thật khi chốt
+import { getKpis } from 'c/mockDataProvider';
 
 export default class KpiDashboard extends LightningElement {
     tiles = [];

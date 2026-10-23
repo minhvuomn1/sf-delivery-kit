@@ -14,7 +14,6 @@ describe('c-list-filter-table', () => {
         jest.clearAllMocks();
     });
 
-    // Thay BR-000 bằng ID business rule thật của dự án
     it('BR-000: hiển thị dữ liệu trả về trong bảng', async () => {
         getRecords.mockResolvedValue([{ Id: '1', Name: 'ABC', Status__c: 'Active', Amount__c: 100 }]);
         const element = createElement('c-list-filter-table', { is: ListFilterTable });

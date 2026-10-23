@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import { getRecords } from 'c/mockDataProvider'; // TODO: thay bằng Apex thật khi chốt
+import { getRecords } from 'c/mockDataProvider';
 
 export default class ListFilterTable extends LightningElement {
     rows = [];

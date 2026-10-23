@@ -1,7 +1,3 @@
-/**
- * Nguồn duy nhất tạo dữ liệu test. Mở rộng thêm method khi có object mới.
- * Quy ước: có tham số doInsert; có bản đơn và bản bulk.
- */
 @IsTest
 public class TestDataFactory {
 

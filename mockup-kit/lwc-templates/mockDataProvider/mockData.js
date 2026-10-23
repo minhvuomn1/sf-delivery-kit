@@ -1,4 +1,3 @@
-// Dữ liệu giả cho prototype. Bám sát field thật trong docs/data-model.md khi đã có.
 export const accounts = [
     { Id: '001000000000001', Name: 'Công ty ABC', Status__c: 'Active', Amount__c: 1200000 },
     { Id: '001000000000002', Name: 'Công ty XYZ', Status__c: 'Pending', Amount__c: 800000 },

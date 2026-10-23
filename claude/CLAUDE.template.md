@@ -19,7 +19,10 @@ Không có dev server local. Lấy URL đăng nhập một lần: `sf org open -
 ## Quy ước (chi tiết trong .claude/skills)
 - Apex: apex-conventions | LWC: lwc-patterns | Test: apex-test-generator
 - **TDD bắt buộc:** viết test trước (RED), code tối thiểu (GREEN), refactor (skill tdd-workflow, lệnh /tdd)
-- Coverage >= 85%, assert có ý nghĩa; mỗi test ghi ID business rule
+- Coverage >= 85%, assert có ý nghĩa; mỗi test ghi ID business rule trong TÊN test (không dùng comment)
+- **Không viết comment** trong mọi file code (Apex, LWC js/html/css, test): đặt tên rõ nghĩa, tách method nhỏ thay vì chú thích
+- **Refresh bắt buộc:** mọi LWC/Apex action làm đổi dữ liệu (lưu, tạo, xóa, đổi trạng thái, gọi Apex imperative) phải làm mới giao diện ngay, không cần F5: `refreshApex` (wire Apex), `notifyRecordUpdateAvailable`/`RefreshEvent` (record page, quick action, tab), xóa `draftValues`, reset loading
+- Đọc ticket Jira qua sub-agent `jira-reader`
 
 ## Tuyệt đối không
 - Deploy trực tiếp lên Production (chỉ qua pipeline)
@@ -53,7 +56,7 @@ Cuối phiên: /handover.
 ID tham chiếu xuyên suốt: J-xx -> SCR-xx -> BR-xx -> test -> ticket.
 
 ## Ngôn ngữ & đặt tên
-- <Điền: tên/label API tiếng Anh; comment/chat tiếng Việt; metadata mới có bản dịch VI hay không>
+- <Điền: tên/label API tiếng Anh; chat tiếng Việt, code không có comment; metadata mới có bản dịch VI hay không>
 
 ## Known platform gotchas (riêng dự án)
 <Thêm mỗi khi gặp lỗi khó chịu, 1-2 dòng/mục. Cái dùng lại được thì đẩy về skill sf-platform-gotchas của kit.>

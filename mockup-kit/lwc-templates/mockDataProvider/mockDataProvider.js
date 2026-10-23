@@ -1,5 +1,3 @@
-// Service module thay thế Apex trong giai đoạn prototype.
-// Khi khách chốt: thay từng hàm bằng Apex controller thật, GIỮ NGUYÊN chữ ký hàm để UI không đổi.
 import { accounts, kpis, approvals } from './mockData';
 
 const delay = (ms = 300) => new Promise((resolve) => setTimeout(resolve, ms));

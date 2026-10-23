@@ -12,7 +12,6 @@ describe('c-multi-step-form', () => {
         }
     });
 
-    // Thay BR-000 bằng ID business rule thật của dự án
     it('BR-000: không cho sang bước 2 khi chưa nhập tên', async () => {
         const element = createElement('c-multi-step-form', { is: MultiStepForm });
         document.body.appendChild(element);

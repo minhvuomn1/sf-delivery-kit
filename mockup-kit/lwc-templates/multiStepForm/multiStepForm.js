@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import { submitForm } from 'c/mockDataProvider'; // TODO: thay bằng Apex thật khi chốt
+import { submitForm } from 'c/mockDataProvider';
 
 export default class MultiStepForm extends LightningElement {
     step = 1;

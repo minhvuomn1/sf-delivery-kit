@@ -25,7 +25,6 @@ describe('c-approval-panel', () => {
         jest.clearAllMocks();
     });
 
-    // Thay BR-000 bằng ID business rule thật của dự án
     it('BR-000: từ chối mà không có ý kiến thì báo lỗi và không gọi duyệt', async () => {
         const element = createElement('c-approval-panel', { is: ApprovalPanel });
         const toastHandler = jest.fn();

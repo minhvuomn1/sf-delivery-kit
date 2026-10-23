@@ -1,6 +1,6 @@
 import { LightningElement } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { getApprovals, decideApproval } from 'c/mockDataProvider'; // TODO: thay bằng Apex thật khi chốt
+import { getApprovals, decideApproval } from 'c/mockDataProvider';
 
 export default class ApprovalPanel extends LightningElement {
     items = [];
@@ -32,7 +32,6 @@ export default class ApprovalPanel extends LightningElement {
     }
 
     async decide(id, decision) {
-        // Ví dụ business rule: từ chối bắt buộc có ý kiến (đổi thành BR thật của dự án)
         if (decision === 'Rejected' && !this.comment.trim()) {
             this.toast('Lỗi', 'Vui lòng nhập ý kiến khi từ chối', 'error');
             return;
