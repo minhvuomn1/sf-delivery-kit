@@ -1,4 +1,6 @@
 # Changelog
+## v1.11.1
+- Sửa hai skill còn trái quy tắc không comment: `apex-test-generator` (SeeAllData=true) và `experience-cloud` (without sharing) giờ ghi lý do trong PR, không ghi trong code.
 ## v1.11.0
 - Lệnh Claude `/sf-kit` (cài bằng `sf-kit install-global`, cài lại để có lệnh mới): `/sf-kit upgrade [--pull] [--dry-run]` chạy dry-run trước, hỏi xác nhận rồi áp dụng và đề xuất cách gộp file `.new`. `install-global` cài mọi lệnh trong `claude/user-commands/`.
 ## v1.10.0

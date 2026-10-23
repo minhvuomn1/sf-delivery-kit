@@ -40,7 +40,7 @@ Salesforce enforces "Secure guest user record access": guest users can't own rec
 
 - Customer Community: use **Sharing Sets** to grant access based on the user's Account/Contact (e.g. all Orders where `Account__c = User.Contact.AccountId`).
 - Customer Community Plus / Partner: roles and sharing rules work; share groups let internal users see records owned by external users.
-- Controllers default to `with sharing`. If a `without sharing` class is truly needed (e.g. reading config the user can't see), isolate it in a small inner/helper class, enforce the account filter manually, and comment why.
+- Controllers default to `with sharing`. If a `without sharing` class is truly needed (e.g. reading config the user can't see), isolate it in a small inner/helper class, enforce the account filter manually, and state why in the PR (no code comments).
 - Always enforce FLS (`WITH USER_MODE` / `AccessLevel.USER_MODE`) — external profiles often have narrower field access than you expect.
 - Test with real external users (`System.runAs(communityUser)`) — see `apex-test-generator` for `createCommunityUser`.
 

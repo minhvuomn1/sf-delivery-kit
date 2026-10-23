@@ -42,7 +42,7 @@ private class OrderServiceTest {
 Rules:
 - Class is `@IsTest private`, named `<ClassUnderTest>Test`.
 - Method names follow `method_scenario_expectedResult`.
-- Never use `@IsTest(SeeAllData=true)` except for the rare objects that require it; explain why in a comment if you do.
+- Never use `@IsTest(SeeAllData=true)` except for the rare objects that require it; state the reason in the PR, not in code.
 - Arrange (data) → Act (inside `Test.startTest()/stopTest()`) → Assert. `startTest` resets governor limits so the code under test gets its own limits; `stopTest` forces async jobs (future, queueable, batch) to finish so you can assert their results.
 
 ## TestDataFactory
