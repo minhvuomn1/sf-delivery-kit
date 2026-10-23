@@ -5,6 +5,33 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const COLOR = !process.env.NO_COLOR && (process.env.FORCE_COLOR || (process.stdout.isTTY && process.env.TERM !== 'dumb'));
+const ansi = (code, s) => COLOR ? `\x1b[${code}m${s}\x1b[0m` : s;
+const paint = (line, err) => {
+  if (!COLOR) return line;
+  let m;
+  const body = (s) => s
+    .replace(/sf-kit v[\d.]+/g, (x) => ansi('1;35', x))
+    .replace(/`([^`]+)`/g, (_, x) => ansi('36', x))
+    .replace(/\[x\]/g, ansi('1;32', '[x]'))
+    .replace(/(\d+) file mới/g, (_, n) => ansi('1;32', n) + ' file mới')
+    .replace(/(\d+) file đã có/g, (_, n) => ansi('2', n + ' file đã có'));
+  if ((m = line.match(/^(\s*)>> (Tiếp theo.*)$/))) return m[1] + ansi('1;33', '>>') + ' ' + ansi('1', body(m[2]));
+  if ((m = line.match(/^(\s*)>> (.*)$/))) return m[1] + ansi('1;36', '>>') + ' ' + body(m[2]);
+  if ((m = line.match(/^(\s*)\+ ([^:]+)(:.*)?$/))) return m[1] + ansi('1;32', '+') + ' ' + ansi('32', m[2]) + (m[3] ? ansi('2', body(m[3])) : '');
+  if ((m = line.match(/^(\s*)! (.*)$/))) return m[1] + ansi(err ? '1;31' : '1;33', '!') + ' ' + ansi(err ? '31' : '33', m[2]);
+  if ((m = line.match(/^(\s*)= (.*)$/))) return m[1] + ansi('2', '= ' + m[2]);
+  if ((m = line.match(/^(\s*)~ (.*)$/))) return m[1] + ansi('1;34', '~') + ' ' + ansi('34', m[2]);
+  if ((m = line.match(/^## (v[\d.]+.*)$/))) return ansi('1;35', '## ' + m[1]);
+  if ((m = line.match(/^(\s*)- (.*)$/))) return m[1] + ansi('2', '-') + ' ' + body(m[2]);
+  if (/^\s*\[ \]/.test(line)) return ansi('2', line);
+  return body(line);
+};
+for (const k of ['log', 'error']) {
+  const orig = console[k].bind(console);
+  console[k] = (...a) => orig(...a.map((x) => (typeof x === 'string' ? x.split('\n').map((l) => paint(l, k === 'error')).join('\n') : x)));
+}
+
 const here = path.dirname(fileURLToPath(import.meta.url));
 const claudeDir = path.resolve(here, '..');
 const root = path.resolve(claudeDir, '..');

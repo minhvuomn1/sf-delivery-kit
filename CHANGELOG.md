@@ -1,4 +1,6 @@
 # Changelog
+## v1.12.0
+- Output CLI có màu và tiêu đề (`sf-kit.mjs`, `kit.mjs`): `>>` cyan, `+` xanh lá, `!` vàng/đỏ, `~` xanh dương, `[x]` xanh lá. Chỉ bật khi là terminal; `NO_COLOR=1` tắt, `FORCE_COLOR=1` ép bật.
 ## v1.11.1
 - Sửa hai skill còn trái quy tắc không comment: `apex-test-generator` (SeeAllData=true) và `experience-cloud` (without sharing) giờ ghi lý do trong PR, không ghi trong code.
 ## v1.11.0

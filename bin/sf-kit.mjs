@@ -12,6 +12,34 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 
+const COLOR = !process.env.NO_COLOR && (process.env.FORCE_COLOR || (process.stdout.isTTY && process.env.TERM !== 'dumb'));
+const ansi = (code, s) => COLOR ? `\x1b[${code}m${s}\x1b[0m` : s;
+const paint = (line, err) => {
+  if (!COLOR) return line;
+  let m;
+  const body = (s) => s
+    .replace(/sf-kit v[\d.]+/g, (x) => ansi('1;35', x))
+    .replace(/`([^`]+)`/g, (_, x) => ansi('36', x))
+    .replace(/\[x\]/g, ansi('1;32', '[x]'))
+    .replace(/(\d+) file mới/g, (_, n) => ansi('1;32', n) + ' file mới')
+    .replace(/(\d+) file đã có/g, (_, n) => ansi('2', n + ' file đã có'));
+  if ((m = line.match(/^(\s*)>> (Tiếp theo.*)$/))) return m[1] + ansi('1;33', '>>') + ' ' + ansi('1', body(m[2]));
+  if ((m = line.match(/^(\s*)>> (.*)$/))) return m[1] + ansi('1;36', '>>') + ' ' + body(m[2]);
+  if ((m = line.match(/^(\s*)\+ ([^:]+)(:.*)?$/))) return m[1] + ansi('1;32', '+') + ' ' + ansi('32', m[2]) + (m[3] ? ansi('2', body(m[3])) : '');
+  if ((m = line.match(/^(\s*)! (.*)$/))) return m[1] + ansi(err ? '1;31' : '1;33', '!') + ' ' + ansi(err ? '31' : '33', m[2]);
+  if ((m = line.match(/^(\s*)= (.*)$/))) return m[1] + ansi('2', '= ' + m[2]);
+  if ((m = line.match(/^(\s*)~ (.*)$/))) return m[1] + ansi('1;34', '~') + ' ' + ansi('34', m[2]);
+  if ((m = line.match(/^## (v[\d.]+.*)$/))) return ansi('1;35', '## ' + m[1]);
+  if ((m = line.match(/^(\s*)- (.*)$/))) return m[1] + ansi('2', '-') + ' ' + body(m[2]);
+  if (/^\s*\[ \]/.test(line)) return ansi('2', line);
+  return body(line);
+};
+const banner = (title) => console.log('\n' + ansi('1;35', '== ' + title + ' ' + '='.repeat(Math.max(3, 56 - title.length))) + '\n');
+for (const k of ['log', 'error']) {
+  const orig = console[k].bind(console);
+  console[k] = (...a) => orig(...a.map((x) => (typeof x === 'string' ? x.split('\n').map((l) => paint(l, k === 'error')).join('\n') : x)));
+}
+
 const KIT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cwd = process.cwd();
 const [cmd = 'help', ...args] = process.argv.slice(2);
@@ -101,6 +129,7 @@ if (cmd === 'init') {
   const name = path.basename(cwd);
   const version = (fs.readFileSync(path.join(KIT, 'package.json'), 'utf8').match(/"version":\s*"([^"]+)"/) || [])[1] || '0.0.0';
   const s = { created: 0, skipped: 0 };
+  banner('sf-kit init');
   console.log(`>> sf-kit v${version}: khởi tạo trong ${cwd}`);
   if (has('--with-template')) copyTree(path.join(KIT, 'starter-kit/project-template'), cwd, s); // chỉ khi dự án trống
   copyTree(path.join(KIT, 'claude/skills'),   path.join(cwd, '.claude/skill-catalog'), s);
@@ -142,6 +171,7 @@ if (cmd === 'init') {
   const dry = has('--dry-run'), version = kitVersion();
   const from = (fs.existsSync(path.join(cwd, '.kit-version')) ? fs.readFileSync(path.join(cwd, '.kit-version'), 'utf8').trim() : 'v0.0.0');
   const ctx = { dry, added: [], updated: [], merge: [], merged: [], backup: path.join(cwd, '.claude/.upgrade-backup', new Date().toISOString().replace(/[:.]/g, '-')) };
+  banner('sf-kit upgrade');
   console.log(`>> sf-kit upgrade: dự án ${from} -> kit v${version}${dry ? ' (dry-run, không ghi gì)' : ''}`);
   syncTree(path.join(KIT, 'claude/skills'),   path.join(cwd, '.claude/skill-catalog'), ctx);
   const activeDir = path.join(cwd, '.claude/skills');
