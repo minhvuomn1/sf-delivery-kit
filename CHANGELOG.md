@@ -1,4 +1,6 @@
 # Changelog
+## v1.11.0
+- Lệnh Claude `/sf-kit` (cài bằng `sf-kit install-global`, cài lại để có lệnh mới): `/sf-kit upgrade [--pull] [--dry-run]` chạy dry-run trước, hỏi xác nhận rồi áp dụng và đề xuất cách gộp file `.new`. `install-global` cài mọi lệnh trong `claude/user-commands/`.
 ## v1.10.0
 - Lệnh `sf-kit upgrade [--pull] [--dry-run]`: cập nhật dự án đã init lên kit mới. Ghi đè file kit (skill-catalog, skill đang bật, agents, commands, `.claude/kit/`) và lưu bản cũ ở `.claude/.upgrade-backup/`; giữ `project-*`. `--pull` chạy `git pull --ff-only` trong thư mục kit trước.
 - `CLAUDE.md` gộp 3 chiều (base lưu ở `.claude/kit/CLAUDE.base.md`); xung đột ghi `CLAUDE.md.new`. `settings.json` ghi bản `.new`. In CHANGELOG từ `.kit-version` đến bản mới.

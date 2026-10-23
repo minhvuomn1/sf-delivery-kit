@@ -5,4 +5,6 @@ Từ v1.10.0 dùng lệnh `sf-kit upgrade`:
 3. `CLAUDE.md` được gộp 3 chiều (bản kit lần trước lưu ở `.claude/kit/CLAUDE.base.md` + CLAUDE.md của dự án + bản kit mới): không xung đột thì ghi thẳng (bản cũ ở backup); có xung đột thì ghi `CLAUDE.md.new` có dấu `<<<<<<<` để bạn xử lý. Lần nâng cấp đầu chưa có base thì chỉ thêm các dòng mới của kit vào cuối file, cần rà lại. `.claude/settings.json` (và `docs/mockup.md`) không bị ghi đè, lệnh ghi bản `.new` để gộp tay rồi xóa `.new`.
 4. Lệnh in các mục CHANGELOG từ `.kit-version` của dự án đến bản mới và cập nhật `.kit-version`. Chạy `/review` + CI, rà `git diff` rồi commit.
 
+Trong Claude Code: chạy `node <KIT>/bin/sf-kit.mjs install-global` một lần mỗi máy (cài lại để có lệnh mới), rồi trong dự án gõ `/sf-kit upgrade --pull`. Lệnh chạy dry-run trước, hỏi xác nhận rồi mới áp dụng và đề xuất cách gộp các file `.new`. Lần đầu với dự án cũ: `git pull` kit bằng tay trước, vì bản kit cũ chưa có `upgrade` và `--pull`.
+
 Bản trước v1.10.0 (thủ công): diff `.claude/skill-catalog`, `.claude/skills`, `.claude/agents`, `.claude/commands`, `.claude/kit` với kit, giữ `project-*`, sửa tay `CLAUDE.md`, cập nhật `.kit-version`.

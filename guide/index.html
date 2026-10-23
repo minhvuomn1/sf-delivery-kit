@@ -223,6 +223,7 @@ node .claude\kit\kit.mjs mockup split OrderApp --screens orderList,approvals --l
 <li>Trong thư mục dự án chạy <code>sf-kit upgrade --pull --dry-run</code> để xem trước, rồi chạy <code>sf-kit upgrade --pull</code> (<code>--pull</code> = <code>git pull --ff-only</code> trong thư mục kit trước; thiếu cờ này lệnh không tự pull). Không dùng lại <code>init</code>, vì <code>init</code> không ghi đè file đã có.</li>
 <li>Skill, agent, command và <code>.claude/kit/</code> được ghi đè theo kit (bản cũ lưu ở <code>.claude/.upgrade-backup/</code>); skill có tiền tố <code>project-</code> được giữ nguyên.</li>
 <li><code>CLAUDE.md</code> được gộp 3 chiều: không xung đột thì ghi thẳng, có xung đột thì ghi <code>CLAUDE.md.new</code> có dấu <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> để bạn xử lý. <code>.claude/settings.json</code> không bị ghi đè, lệnh ghi bản <code>.new</code> để gộp tay.</li>
+<li>Trong Claude Code có thể gõ <code>/sf-kit upgrade --pull</code> (cài một lần bằng <code>install-global</code>, cài lại để có lệnh mới): lệnh chạy dry-run trước, hỏi xác nhận rồi mới áp dụng.</li>
 <li>Lệnh in CHANGELOG từ <code>.kit-version</code> của dự án đến bản mới và cập nhật <code>.kit-version</code>.</li>
 </ol>
 

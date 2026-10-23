@@ -3,7 +3,7 @@
 //   sf-kit init [--clouds a,b] [--all-skills] [--detect] [--with-template]   thêm .claude/, docs/, CLAUDE.md... vào dự án CÓ SẴN (không ghi đè; --with-template mới copy thêm source mẫu)
 //   sf-kit mockup add <template> <tênMànHình> | rename | split | templates   làm mockup thẳng trong source dự án, gom trong app "Mockup"
 //   sf-kit upgrade [--pull] [--dry-run]                     cập nhật dự án lên kit mới (--pull: git pull kit trước; ghi đè file kit có backup; CLAUDE.md gộp 3 chiều, xung đột/settings.json ghi bản .new)
-//   sf-kit install-global                                 cài lệnh /sf-init cho Claude Code (một lần/máy)
+//   sf-kit install-global                                 cài lệnh /sf-init và /sf-kit cho Claude Code (một lần/máy)
 //   sf-kit detect [--apply]                                 quét docs/brd, docs/fsd, tìm cloud/skill cần bật
 //   sf-kit add-cloud <cloud...> | install <skill...> | list | registry
 import fs from 'node:fs';
@@ -165,12 +165,13 @@ if (cmd === 'init') {
   if (!ctx.added.length && !ctx.updated.length && !ctx.merge.length && !ctx.merged.length) console.log('\n>> Dự án đã khớp kit.');
   printChangelog(from);
   if (!dry) { fs.writeFileSync(path.join(cwd, '.kit-version'), `v${version}\n`); console.log('\n>> Đã cập nhật .kit-version. Gộp các file .new vào file gốc rồi xóa .new; rà git diff trước khi commit.'); }
-} else if (cmd === 'install-global') { // cài lệnh /sf-init vào ~/.claude/commands (một lần cho mỗi máy)
+} else if (cmd === 'install-global') { // cài lệnh /sf-init, /sf-kit vào ~/.claude/commands (một lần cho mỗi máy)
   const dir = path.join(os.homedir(), '.claude', 'commands'); fs.mkdirSync(dir, { recursive: true });
   const kitPath = KIT.split(path.sep).join('/');
-  const t = fs.readFileSync(path.join(KIT, 'claude/user-commands/sf-init.md'), 'utf8').split('{{KIT}}').join(kitPath);
-  fs.writeFileSync(path.join(dir, 'sf-init.md'), t);
-  console.log(`>> Đã cài lệnh /sf-init vào ${path.join(dir, 'sf-init.md')} (kit: ${kitPath}).\n>> Mở Claude Code ở thư mục dự án và gõ /sf-init. Nếu bạn di chuyển thư mục kit, chạy lại lệnh này.`);
+  const names = fs.readdirSync(path.join(KIT, 'claude/user-commands')).filter(f => f.endsWith('.md'));
+  for (const f of names) fs.writeFileSync(path.join(dir, f), fs.readFileSync(path.join(KIT, 'claude/user-commands', f), 'utf8').split('{{KIT}}').join(kitPath));
+  console.log(`>> Đã cài ${names.map(f => '/' + f.replace(/.md$/, '')).join(', ')} vào ${dir} (kit: ${kitPath}).
+>> Mở Claude Code ở thư mục dự án và gõ /sf-init hoặc /sf-kit upgrade. Nếu bạn di chuyển thư mục kit, chạy lại lệnh này.`);
 } else if (['detect', 'add-cloud', 'install', 'list', 'registry', 'mockup'].includes(cmd)) {
   if (!fs.existsSync(path.join(cwd, '.claude/kit/kit.mjs'))) { console.error('Chưa khởi tạo. Chạy `sf-kit init` trong thư mục dự án trước.'); process.exit(1); }
   process.exit(runKit([cmd, ...args]));
