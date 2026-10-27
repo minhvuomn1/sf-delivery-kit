@@ -1,4 +1,7 @@
 # Changelog
+## v1.13.0
+- Thêm 14 agent theo vai trò (requirements-analyst, solution-architect, data-model-designer, apex-developer, lwc-developer, flow-declarative-developer, integration-developer, experience-cloud-developer, code-reviewer, security-reviewer, qa-uat-engineer, deployment-engineer, documentation-writer, debug-support) và lệnh `/orchestrate` điều phối từ ticket đến deploy có quality gate. Bỏ `apex-test-engineer` vì trùng `test-writer`.
+- Chỉnh theo quy ước kit: skill ở `.claude/skills/`, không viết comment trong code (code-reviewer coi là BLOCKER), dùng `test-writer` và `jira-reader`.
 ## v1.12.0
 - Output CLI có màu và tiêu đề (`sf-kit.mjs`, `kit.mjs`): `>>` cyan, `+` xanh lá, `!` vàng/đỏ, `~` xanh dương, `[x]` xanh lá. Chỉ bật khi là terminal; `NO_COLOR=1` tắt, `FORCE_COLOR=1` ép bật.
 ## v1.11.1
