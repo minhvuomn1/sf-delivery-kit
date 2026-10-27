@@ -1,4 +1,6 @@
 # Changelog
+## v1.13.1
+- Guide: thêm mục "Dùng agent để làm việc" (danh sách 20 agent, gọi riêng một agent, `/orchestrate` và quality gate, cách làm từ issue trong sheet).
 ## v1.13.0
 - Thêm 14 agent theo vai trò (requirements-analyst, solution-architect, data-model-designer, apex-developer, lwc-developer, flow-declarative-developer, integration-developer, experience-cloud-developer, code-reviewer, security-reviewer, qa-uat-engineer, deployment-engineer, documentation-writer, debug-support) và lệnh `/orchestrate` điều phối từ ticket đến deploy có quality gate. Bỏ `apex-test-engineer` vì trùng `test-writer`.
 - Chỉnh theo quy ước kit: skill ở `.claude/skills/`, không viết comment trong code (code-reviewer coi là BLOCKER), dùng `test-writer` và `jira-reader`.

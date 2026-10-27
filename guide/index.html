@@ -31,7 +31,7 @@ th{background:var(--card)}
 <body>
 <div class="wrap">
 <nav>
-<strong>sf-kit v1.5.2</strong>
+<strong>sf-kit v1.13.0</strong>
 <a href="#tong-quan">Tổng quan</a>
 <a href="#yeu-cau">Yêu cầu</a>
 <a href="#cai-dat">Cài đặt</a>
@@ -46,6 +46,7 @@ th{background:var(--card)}
 <a href="#nang-cap">Nâng cấp kit</a>
 <a href="#su-co">Xử lý sự cố</a>
 <a href="#gioi-han">Giới hạn đã biết</a>
+<a href="#agents">Dùng agent</a>
 </nav>
 <main>
 <h1>sf-kit: Hướng dẫn sử dụng</h1>
@@ -247,6 +248,85 @@ node .claude\kit\kit.mjs mockup split OrderApp --screens orderList,approvals --l
 <li>MCE không deploy bằng <code>sf</code> CLI. Tài liệu trong <code>docs/mce/</code> là nguồn truy vết chính.</li>
 <li>NotebookLM MCP chưa được kiểm thử với notebook thật.</li>
 </ul>
+<h2 id="agents">15. Dùng agent để làm việc</h2>
+<p>Agent (subagent) là các vai chuyên trách nằm trong <code>.claude/agents/</code>, mỗi agent có chỉ dẫn, bộ công cụ và quyền riêng. Claude tự gọi khi mô tả khớp việc, hoặc bạn gọi trực tiếp: "dùng lwc-developer viết màn hình danh sách đơn hàng". Gõ <code>/agents</code> trong Claude Code để xem danh sách. Dự án cũ cần <code>sf-kit upgrade</code> (mục 12) mới có các agent mới.</p>
+
+<h3>Danh sách agent</h3>
+<table>
+<tr><th>Nhóm</th><th>Agent</th><th>Làm gì</th><th>Ghi file</th></tr>
+<tr><td rowspan="3">Phân tích và thiết kế</td><td><code>requirements-analyst</code></td><td>Tách ticket hoặc tài liệu BA thành user story, AC, phạm vi, câu hỏi còn mở. Dùng đầu tiên khi nhận task.</td><td>Không</td></tr>
+<tr><td><code>solution-architect</code></td><td>Chọn declarative hay code, thiết kế tích hợp, kiểm governor limit và sharing từ thiết kế (model opus).</td><td>Không</td></tr>
+<tr><td><code>data-model-designer</code></td><td>Thiết kế object, field, quan hệ, record type, sharing model.</td><td>Có (docs/schema)</td></tr>
+<tr><td rowspan="5">Triển khai</td><td><code>apex-developer</code></td><td>Trigger (handler), service, selector, batch, queueable, controller <code>@AuraEnabled</code>.</td><td>Có</td></tr>
+<tr><td><code>lwc-developer</code></td><td>LWC: wire hay imperative, refresh dữ liệu, xử lý lỗi, SLDS, Jest.</td><td>Có</td></tr>
+<tr><td><code>flow-declarative-developer</code></td><td>Flow, validation rule, formula, permission set, FlexiPage.</td><td>Có</td></tr>
+<tr><td><code>integration-developer</code></td><td>Callout REST/SOAP, Named Credential, Platform Event, retry, log lỗi.</td><td>Có</td></tr>
+<tr><td><code>experience-cloud-developer</code></td><td>Portal: guest user, sharing set, LWC cho Experience Builder, CSP.</td><td>Có</td></tr>
+<tr><td rowspan="7">Chất lượng</td><td><code>test-writer</code></td><td>Viết Apex test theo <code>apex-test-generator</code>.</td><td>Có (test)</td></tr>
+<tr><td><code>apex-reviewer</code></td><td>Review Apex theo <code>apex-conventions</code>.</td><td>Không</td></tr>
+<tr><td><code>code-reviewer</code></td><td>Review độc lập Apex, LWC, Flow, test. Comment trong code là BLOCKER.</td><td>Không</td></tr>
+<tr><td><code>security-reviewer</code></td><td><code>without sharing</code>, CRUD/FLS, SOQL injection, lộ dữ liệu guest (model opus). Bắt buộc với portal.</td><td>Không</td></tr>
+<tr><td><code>qa-uat-engineer</code></td><td>Sinh test case, kịch bản UAT, checklist hồi quy.</td><td>Có (docs/qa)</td></tr>
+<tr><td><code>uat-verifier</code></td><td>Chạy giao diện trên org bằng Playwright theo journey/AC, báo pass/fail theo ID.</td><td>Không</td></tr>
+<tr><td><code>debug-support</code></td><td>Phân tích debug log, lỗi production, governor limit, lỗi deploy.</td><td>Không</td></tr>
+<tr><td rowspan="3">Đọc và phân tích</td><td><code>jira-reader</code></td><td>Đọc ticket Jira, trả tóm tắt chuẩn kèm AC. Chỉ đọc, không comment hay chuyển trạng thái.</td><td>Không</td></tr>
+<tr><td><code>fsd-analyst</code></td><td>Đọc FSD, liệt kê object, field, business rule, màn hình; chỉ ra điểm mơ hồ.</td><td>Không</td></tr>
+<tr><td><code>task-reader</code></td><td>Tóm tắt tiến độ trong <code>docs/tasks/</code>.</td><td>Không</td></tr>
+<tr><td rowspan="2">Vận hành</td><td><code>deployment-engineer</code></td><td>Tạo <code>package.xml</code>, validate dry-run, chọn test level, thứ tự deploy. Không deploy production.</td><td>Có (manifest)</td></tr>
+<tr><td><code>documentation-writer</code></td><td>Tài liệu kỹ thuật, release note, nội dung comment Jira và mô tả PR (chỉ soạn, đăng cần bạn xác nhận).</td><td>Có (docs)</td></tr>
+</table>
+
+<h3>Gọi riêng một agent</h3>
+<p>Dùng cho việc nhỏ, một bước. Nói rõ tên agent và việc cần làm:</p>
+<pre><code>dùng test-writer viết test cho OrderService
+dùng code-reviewer review thay đổi trong nhánh hiện tại
+dùng debug-support phân tích log này: &lt;dán log&gt;</code></pre>
+
+<h3>/orchestrate: điều phối cả quy trình</h3>
+<p>Dùng cho task nhiều bước (tính năng mới, bug đụng nhiều phần). Phiên Claude chính đóng vai điều phối viên: chọn đội tối thiểu cần thiết, giao việc cho từng agent, kiểm đầu ra và chặn ở các quality gate. Điều phối viên không tự viết code hay tài liệu. Đây là slash command, không phải agent, vì agent không gọi được agent khác.</p>
+<pre><code>/orchestrate PROJ-123
+/orchestrate Thêm trường Ngày hết hạn cho Hợp đồng và chặn lưu khi trước ngày hiện tại</code></pre>
+<table>
+<tr><th>Loại việc</th><th>Đội được chọn (theo thứ tự)</th></tr>
+<tr><td>Tính năng mới</td><td>requirements-analyst (đọc ticket qua <code>jira-reader</code>) → solution-architect → data-model-designer (nếu cần) → agent dev → test-writer → code-reviewer → security-reviewer → qa-uat-engineer → deployment-engineer → documentation-writer</td></tr>
+<tr><td>Bug</td><td>debug-support → agent dev liên quan → test-writer → code-reviewer → qa-uat-engineer → deployment-engineer</td></tr>
+<tr><td>Chỉ declarative</td><td>requirements-analyst → solution-architect → flow-declarative-developer → qa-uat-engineer → deployment-engineer</td></tr>
+<tr><td>Có portal</td><td>Thêm experience-cloud-developer; security-reviewer là bắt buộc</td></tr>
+<tr><td>Có hệ thống ngoài</td><td>Thêm integration-developer</td></tr>
+</table>
+<h3>Quality gate</h3>
+<table>
+<tr><th>Gate</th><th>Điều kiện để qua</th></tr>
+<tr><td>G1 Yêu cầu</td><td>Mọi AC rõ ràng, không còn câu hỏi chặn. Còn thì dừng và hỏi bạn.</td></tr>
+<tr><td>G2 Thiết kế</td><td>Có ADR, đã kiểm governor limit và sharing.</td></tr>
+<tr><td>G3 Code</td><td>Dev agent tự kiểm checklist đạt; đã có test từ <code>test-writer</code>.</td></tr>
+<tr><td>G4 Test</td><td>Test pass, coverage từ 85% mỗi class đổi, mỗi AC có test.</td></tr>
+<tr><td>G5 Review</td><td><code>code-reviewer</code> = APPROVE (không còn BLOCKER hay MAJOR).</td></tr>
+<tr><td>G6 Bảo mật</td><td><code>security-reviewer</code> = PASS hoặc PASS WITH CONDITIONS đã xử lý.</td></tr>
+<tr><td>G7 QA</td><td>Các case ưu tiên cao đều pass, đã kiểm bằng user thật (không phải admin).</td></tr>
+<tr><td>G8 Deploy</td><td>Manifest đủ, validate thành công. Production do bạn tự thực hiện.</td></tr>
+</table>
+<p>Gate không đạt thì lỗi được gửi lại đúng agent sửa rồi chạy lại reviewer. Tối đa 3 vòng mỗi gate, quá thì dừng và hỏi bạn.</p>
+
+<h3>Làm từ một issue trong sheet</h3>
+<ol>
+<li>Dán <b>một issue mỗi lần chạy</b>, có nhãn từng cột, đủ thông tin để agent không phải đoán:
+<pre><code>/orchestrate
+Mã: ISS-014
+Loại: Bug
+Ưu tiên: Cao
+Tóm tắt: Phiếu đề nghị không gửi được khi thiếu người duyệt
+Mô tả: ...
+Kết quả mong đợi (AC): ...
+Link/ảnh: ...</code></pre></li>
+<li>Không dán cả sheet hay nhiều issue một lúc, vì gate G1 và G4 sẽ rối. Làm lần lượt từng issue.</li>
+<li>Thiếu AC hoặc mơ hồ thì lệnh dừng ở G1 và hỏi bạn; trả lời bổ sung rồi chạy tiếp.</li>
+<li>Issue Jira thì chỉ cần mã: <code>/orchestrate PROJ-123</code>, <code>jira-reader</code> tự đọc ticket.</li>
+<li>Theo dõi tiến độ: <code>/orchestrate</code> <b>không lưu trạng thái</b>. Sheet vẫn là nơi quản lý; chép báo cáo cuối (đội đã dùng, trạng thái gate, kết quả test, việc còn lại) vào ghi chú của issue, hoặc lưu thành <code>docs/tasks/&lt;mã&gt;.md</code> để <code>task-reader</code> đọc được.</li>
+</ol>
+
+<div class="note"><b>Lưu ý.</b> Agent dùng để review (<code>code-reviewer</code>, <code>security-reviewer</code>) chỉ đọc, không sửa code, để tách người viết và người kiểm. Không agent nào deploy production; <code>deployment-engineer</code> chỉ chuẩn bị và validate. Mọi agent viết code tuân thủ quy tắc không comment trong code. Hành động ảnh hưởng người khác (push, mở PR, comment hoặc chuyển trạng thái Jira, deploy org dùng chung) luôn được hỏi bạn trước. Bộ agent và <code>/orchestrate</code> chưa được thử trên ticket thật; chạy thử với một issue nhỏ trước khi dùng cho việc quan trọng.</div>
+
 </main>
 </div>
 </body>

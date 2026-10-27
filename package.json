@@ -1,6 +1,6 @@
 {
   "name": "sf-delivery-kit",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "Bộ công cụ chuẩn hóa dự án Salesforce + Claude Code. Chạy `sf-kit init` trong thư mục dự án để sinh docs, skill, agent, MCP.",
   "type": "module",
   "bin": { "sf-kit": "bin/sf-kit.mjs" },
