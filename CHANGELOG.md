@@ -1,4 +1,9 @@
 # Changelog
+## v1.14.0
+- Gộp 14 agent mới thành 8 vai để giảm token: `solution-designer` (requirements-analyst + solution-architect + data-model-designer), `apex-developer` (+ integration-developer), `lwc-developer` (+ experience-cloud-developer), `code-reviewer` (+ security-reviewer, hai lượt chất lượng và bảo mật), `release-engineer` (deployment-engineer + documentation-writer); giữ `flow-declarative-developer`, `qa-uat-engineer`, `debug-support`. Người viết và người kiểm vẫn tách riêng.
+- Giảm token: bỏ quy tắc chung lặp lại, agent chỉ đọc phần skill liên quan và trả ngắn (~300 từ), `qa-uat-engineer` và `release-engineer` mặc định `sonnet`. `/orchestrate --lite` cho việc nhỏ (dev → test-writer → code-reviewer, bỏ G2/G6/G7).
+- `sf-kit upgrade` đọc `claude/kit/obsolete.json`: file kit đã bỏ mà còn nguyên như bản kit cũ thì chuyển vào `.claude/.upgrade-backup/` và xóa; file đã bị sửa thì giữ lại và cảnh báo.
+- Guide: cập nhật mục "Dùng agent để làm việc" (14 agent, `--lite`, tiết kiệm token).
 ## v1.13.1
 - Guide: thêm mục "Dùng agent để làm việc" (danh sách 20 agent, gọi riêng một agent, `/orchestrate` và quality gate, cách làm từ issue trong sheet).
 ## v1.13.0

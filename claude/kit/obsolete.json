@@ -1,0 +1,61 @@
+{
+  "note": "File kit đã bị gộp hoặc xóa. sf-kit upgrade chỉ xóa file còn nguyên như bản kit cũ (khớp sha256 của nội dung, bỏ qua CRLF); file đã bị sửa thì giữ lại và cảnh báo.",
+  "files": [
+    {
+      "path": ".claude/agents/requirements-analyst.md",
+      "mergedInto": "solution-designer",
+      "sha256": [
+        "17963a5c1cd53560f0b561b05ea16bb1f394198376fe27906ff3d3fb0560a2d2"
+      ]
+    },
+    {
+      "path": ".claude/agents/solution-architect.md",
+      "mergedInto": "solution-designer",
+      "sha256": [
+        "93314fc2e6fe627aa1c15d2c0196df5bdd727f26ef9fa132a5c4977b4eb3df12"
+      ]
+    },
+    {
+      "path": ".claude/agents/data-model-designer.md",
+      "mergedInto": "solution-designer",
+      "sha256": [
+        "d9033e6833b89312668cc5a59a7be3cf6aac4b706c5e52ca0c201acd43840b59"
+      ]
+    },
+    {
+      "path": ".claude/agents/integration-developer.md",
+      "mergedInto": "apex-developer",
+      "sha256": [
+        "834b55df0457f1fcc50b14573364e0ab3def5b34491ed7eb301ddb178d73a523"
+      ]
+    },
+    {
+      "path": ".claude/agents/experience-cloud-developer.md",
+      "mergedInto": "lwc-developer",
+      "sha256": [
+        "daeb9e7d524309d7ac6ced69e4c40b187d493d5b79179b9fe35ea782e9efcd90"
+      ]
+    },
+    {
+      "path": ".claude/agents/security-reviewer.md",
+      "mergedInto": "code-reviewer",
+      "sha256": [
+        "44d67dc43fe71d0132c43677c2d3895c77f7f32cc8b2131a46fc7e884c373153"
+      ]
+    },
+    {
+      "path": ".claude/agents/deployment-engineer.md",
+      "mergedInto": "release-engineer",
+      "sha256": [
+        "8929e5923d7eb668a93998164a48789a5bf5f5862a27827bf078be2f560f91ab"
+      ]
+    },
+    {
+      "path": ".claude/agents/documentation-writer.md",
+      "mergedInto": "release-engineer",
+      "sha256": [
+        "3637ec1cace241c64a26e21641afa11e0b7ebcc1c39651cfca5cfacba89893e7"
+      ]
+    }
+  ]
+}

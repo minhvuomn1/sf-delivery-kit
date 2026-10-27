@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
+import crypto from 'node:crypto';
 
 const COLOR = !process.env.NO_COLOR && (process.env.FORCE_COLOR || (process.stdout.isTTY && process.env.TERM !== 'dumb'));
 const ansi = (code, s) => COLOR ? `\x1b[${code}m${s}\x1b[0m` : s;
@@ -170,7 +171,7 @@ if (cmd === 'init') {
   if (!fs.existsSync(path.join(cwd, '.claude/kit/kit.mjs'))) { console.error('Chưa khởi tạo. Chạy `sf-kit init` trong thư mục dự án trước.'); process.exit(1); }
   const dry = has('--dry-run'), version = kitVersion();
   const from = (fs.existsSync(path.join(cwd, '.kit-version')) ? fs.readFileSync(path.join(cwd, '.kit-version'), 'utf8').trim() : 'v0.0.0');
-  const ctx = { dry, added: [], updated: [], merge: [], merged: [], backup: path.join(cwd, '.claude/.upgrade-backup', new Date().toISOString().replace(/[:.]/g, '-')) };
+  const ctx = { dry, added: [], updated: [], removed: [], keptObsolete: [], merge: [], merged: [], backup: path.join(cwd, '.claude/.upgrade-backup', new Date().toISOString().replace(/[:.]/g, '-')) };
   banner('sf-kit upgrade');
   console.log(`>> sf-kit upgrade: dự án ${from} -> kit v${version}${dry ? ' (dry-run, không ghi gì)' : ''}`);
   syncTree(path.join(KIT, 'claude/skills'),   path.join(cwd, '.claude/skill-catalog'), ctx);
@@ -180,6 +181,21 @@ if (cmd === 'init') {
   }
   syncTree(path.join(KIT, 'claude/commands'), path.join(cwd, '.claude/commands'), ctx);
   syncTree(path.join(KIT, 'claude/agents'),   path.join(cwd, '.claude/agents'), ctx);
+  const obsoleteFile = path.join(KIT, 'claude/kit/obsolete.json');
+  if (fs.existsSync(obsoleteFile)) for (const entry of JSON.parse(fs.readFileSync(obsoleteFile, 'utf8')).files || []) {
+    const rel = typeof entry === 'string' ? entry : entry.path, known = entry.sha256 || [];
+    const target = path.join(cwd, rel);
+    if (!fs.existsSync(target)) continue;
+    const digest = crypto.createHash('sha256').update(norm(fs.readFileSync(target))).digest('hex');
+    if (known.length && !known.includes(digest)) {
+      ctx.keptObsolete.push(`${rel}  (đã bị sửa; kit đã gộp vào ${entry.mergedInto || 'agent khác'}, xem lại rồi tự xóa hoặc đổi tên thành project-*)`);
+      continue;
+    }
+    ctx.removed.push(rel);
+    if (dry) continue;
+    const bak = path.join(ctx.backup, rel); fs.mkdirSync(path.dirname(bak), { recursive: true });
+    fs.copyFileSync(target, bak); fs.rmSync(target);
+  }
   syncTree(path.join(KIT, 'claude/kit'),      path.join(cwd, '.claude/kit'), ctx);
   syncTree(path.join(KIT, 'claude/skill-registry.json'), path.join(cwd, '.claude/kit/skill-registry.json'), ctx);
   syncTree(path.join(KIT, 'cloud-profiles'),  path.join(cwd, '.claude/kit/cloud-profiles'), ctx);
@@ -190,9 +206,11 @@ if (cmd === 'init') {
   if (fs.existsSync(path.join(cwd, 'docs/mockup.md'))) proposeFile(fs.readFileSync(path.join(KIT, 'mockup-kit/deploy-prototype.md'), 'utf8'), path.join(cwd, 'docs/mockup.md'), ctx);
   const show = (t, l) => { if (l.length) console.log(`\n${t} (${l.length}):\n` + l.map(f => '  ' + f).join('\n')); };
   show('+ File mới', ctx.added); show('~ File kit đã cập nhật' + (dry ? ' (sẽ ghi đè)' : ' (bản cũ ở .claude/.upgrade-backup)'), ctx.updated);
+  show('- File kit đã bỏ (đã gộp vào agent khác)' + (dry ? '' : ', bản cũ ở .claude/.upgrade-backup'), ctx.removed);
   show('= Đã gộp tự động' + (dry ? '' : ' (bản cũ ở .claude/.upgrade-backup)'), ctx.merged);
+  show('! Agent cũ đã bị sửa nên được giữ lại', ctx.keptObsolete);
   show('! Cần gộp tay' + (dry ? '' : ' (đã ghi bản .new cạnh file gốc)'), ctx.merge);
-  if (!ctx.added.length && !ctx.updated.length && !ctx.merge.length && !ctx.merged.length) console.log('\n>> Dự án đã khớp kit.');
+  if (!ctx.added.length && !ctx.updated.length && !ctx.merge.length && !ctx.merged.length && !ctx.removed.length && !ctx.keptObsolete.length) console.log('\n>> Dự án đã khớp kit.');
   printChangelog(from);
   if (!dry) { fs.writeFileSync(path.join(cwd, '.kit-version'), `v${version}\n`); console.log('\n>> Đã cập nhật .kit-version. Gộp các file .new vào file gốc rồi xóa .new; rà git diff trước khi commit.'); }
 } else if (cmd === 'install-global') { // cài lệnh /sf-init, /sf-kit vào ~/.claude/commands (một lần cho mỗi máy)

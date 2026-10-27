@@ -16,7 +16,7 @@
 | journey-template | template | Mẫu journey + screens + traceability | | 1.0.0 | |
 | sf-platform-gotchas | skill | Lỗi nền tảng SF đã gặp (FLS, picklist RT, null bind, deploy chậm, datatable) | | 1.2.0 | |
 | agents: task-reader, fsd-analyst, uat-verifier | agent | Đọc tiến độ, phân tích FSD, kiểm thử UI bằng Playwright | | 1.2.0 | |
-| agents: requirements-analyst, solution-architect, data-model-designer, apex-developer, lwc-developer, flow-declarative-developer, integration-developer, experience-cloud-developer, code-reviewer, security-reviewer, qa-uat-engineer, deployment-engineer, documentation-writer, debug-support + lệnh /orchestrate | agent | Đội agent theo vai trò, điều phối từ ticket đến deploy có quality gate | | 1.13.0 | |
+| agents: solution-designer, apex-developer, lwc-developer, flow-declarative-developer, code-reviewer, qa-uat-engineer, release-engineer, debug-support + lệnh /orchestrate [--lite] | agent | Đội agent theo vai trò (đã gộp từ 14 xuống 8), điều phối từ ticket đến deploy có quality gate | | 1.14.0 | |
 | tasks/, runbooks/, domain-map | template | Theo dõi task, runbook deploy, bản đồ nghiệp vụ | | 1.2.0 | |
 | copado-deploy, deploy-troubleshooting, org-parity-check, post-deploy-steps, sf-mcp-deploy | skill | Deploy/promote/diff org/sau deploy/MCP deploy | | 1.3.0 | DongTienPaper |
 | salesforce, salesforce-developer, using-ui-bundle-salesforce-data, frontend-design, find-skills | skill | Nền tảng Salesforce dev, UI bundle, thiết kế UI, tìm skill | | 1.3.0 | DongTienPaper |

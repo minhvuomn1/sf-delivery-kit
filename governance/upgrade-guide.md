@@ -7,4 +7,6 @@ Từ v1.10.0 dùng lệnh `sf-kit upgrade`:
 
 Trong Claude Code: chạy `node <KIT>/bin/sf-kit.mjs install-global` một lần mỗi máy (cài lại để có lệnh mới), rồi trong dự án gõ `/sf-kit upgrade --pull`. Lệnh chạy dry-run trước, hỏi xác nhận rồi mới áp dụng và đề xuất cách gộp các file `.new`. Lần đầu với dự án cũ: `git pull` kit bằng tay trước, vì bản kit cũ chưa có `upgrade` và `--pull`.
 
+File kit đã bị gộp hoặc bỏ (liệt kê trong `claude/kit/obsolete.json`, ví dụ các agent cũ): nếu còn nguyên như bản kit cũ thì chuyển vào backup và xóa khỏi dự án; nếu đã bị sửa thì giữ lại và cảnh báo, bạn tự xóa hoặc đổi tên thành `project-*`.
+
 Bản trước v1.10.0 (thủ công): diff `.claude/skill-catalog`, `.claude/skills`, `.claude/agents`, `.claude/commands`, `.claude/kit` với kit, giữ `project-*`, sửa tay `CLAUDE.md`, cập nhật `.kit-version`.
